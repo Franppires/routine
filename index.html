@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2f8f8a">
+<meta name="theme-color" content="#faf6f1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Rotina Bebê & Mãe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,480 +13,568 @@
 :root {
   --bg: #faf6f1;
   --surface: #ffffff;
-  --surface-2: #f4eee7;
+  --surface-2: #f3ede6;
   --text: #2d2a32;
   --muted: #6f6a75;
-  --line: #e7dfd5;
+  --line: #ebe3d9;
   --accent: #2f8f8a;
   --done: #3f9b63;
-  --shadow: 0 1px 2px rgba(60,40,20,.06), 0 4px 14px rgba(60,40,20,.06);
+  --on-c: #ffffff;
+  --shadow: 0 1px 2px rgba(60,40,20,.05), 0 6px 18px rgba(60,40,20,.06);
   --c-teal: #2f8f8a;
-  --c-orange: #c97a3d;
+  --c-orange: #c47234;
   --c-pink: #c25a74;
   --c-purple: #85568a;
   --c-navy: #3a4675;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1b1a1f; --surface: #25242b; --surface-2: #2e2d35; --text: #f1edf3;
-    --muted: #aaa4b0; --line: #3a3842; --accent: #4fb5ae; --done: #5cc285;
-    --shadow: 0 1px 2px rgba(0,0,0,.3);
-    --c-teal: #4fb5ae; --c-orange: #e39a5f; --c-pink: #e07c95; --c-purple: #b083b5; --c-navy: #8193d6;
+    --bg: #18171c; --surface: #222128; --surface-2: #2c2b33; --text: #f1edf3;
+    --muted: #a39dab; --line: #34323c; --accent: #4fb5ae; --done: #5cc285; --on-c: #18171c;
+    --shadow: 0 1px 2px rgba(0,0,0,.35);
+    --c-teal: #4fb5ae; --c-orange: #e39a5f; --c-pink: #e07c95; --c-purple: #b98ebe; --c-navy: #8a9be0;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #1b1a1f; --surface: #25242b; --surface-2: #2e2d35; --text: #f1edf3;
-  --muted: #aaa4b0; --line: #3a3842; --accent: #4fb5ae; --done: #5cc285;
-  --shadow: 0 1px 2px rgba(0,0,0,.3);
-  --c-teal: #4fb5ae; --c-orange: #e39a5f; --c-pink: #e07c95; --c-purple: #b083b5; --c-navy: #8193d6;
+  --bg: #18171c; --surface: #222128; --surface-2: #2c2b33; --text: #f1edf3;
+  --muted: #a39dab; --line: #34323c; --accent: #4fb5ae; --done: #5cc285; --on-c: #18171c;
+  --shadow: 0 1px 2px rgba(0,0,0,.35);
+  --c-teal: #4fb5ae; --c-orange: #e39a5f; --c-pink: #e07c95; --c-purple: #b98ebe; --c-navy: #8a9be0;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--bg); color: var(--text);
   font-family: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 16px; line-height: 1.45;
+  font-size: 16px; line-height: 1.45; -webkit-tap-highlight-color: transparent;
 }
-.wrap { max-width: 1040px; margin: 0 auto; padding: 20px 16px 64px; }
+img { object-fit: contain; }
+.wrap { max-width: 1000px; margin: 0 auto; padding: 24px 16px 48px; }
 
-/* Header */
-header.top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-header.top h1 { font-size: 1.55rem; margin: 0; font-weight: 800; letter-spacing: -.01em; }
-header.top .sub { color: var(--muted); margin: 2px 0 0; font-weight: 600; text-transform: capitalize; }
-.icon-btn {
-  border: 1px solid var(--line); background: var(--surface); color: var(--text);
-  border-radius: 10px; padding: 8px 10px; font: inherit; font-size: .9rem; cursor: pointer; white-space: nowrap;
+/* ---------- Cabeçalho ---------- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.greet { display: flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: .07em; }
+.greet img { width: 20px; height: 20px; }
+.top h1 { margin: 4px 0 2px; font-size: 1.65rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+.top .sub { color: var(--muted); font-weight: 600; font-size: .95rem; }
+.ring { position: relative; width: 78px; height: 78px; flex: none; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke-width: 7; }
+.ring .trk { stroke: var(--surface-2); }
+.ring .val { stroke: var(--done); stroke-linecap: round; stroke-dasharray: 169.65; stroke-dashoffset: 169.65; transition: stroke-dashoffset .5s; }
+.ring-txt { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; line-height: 1; }
+.ring-txt b { font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+.ring-txt span { font-size: .66rem; color: var(--muted); font-weight: 700; margin-top: 3px; }
+
+/* ---------- Card "Agora" ---------- */
+.hero {
+  --c: var(--accent); border-radius: 22px; padding: 18px 20px 16px; margin-bottom: 12px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--c) 20%, var(--surface)), color-mix(in srgb, var(--c) 5%, var(--surface)) 70%);
+  border: 1px solid color-mix(in srgb, var(--c) 28%, transparent); box-shadow: var(--shadow);
 }
-.icon-btn:hover { background: var(--surface-2); }
+.hero-top { display: flex; align-items: center; gap: 8px; font-size: .76rem; font-weight: 800; color: var(--c); text-transform: uppercase; letter-spacing: .06em; }
+.hero-top .left { margin-left: auto; text-transform: none; letter-spacing: 0; color: var(--text); background: var(--surface); padding: 3px 10px; border-radius: 99px; font-size: .8rem; white-space: nowrap; }
+.pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--c); flex: none; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c) 55%, transparent); } 70%, 100% { box-shadow: 0 0 0 9px transparent; } }
+.hero-main { display: flex; align-items: center; gap: 14px; margin: 10px 0 2px; }
+.hero-ill img { width: 58px; height: 58px; display: block; filter: drop-shadow(0 3px 4px rgba(0,0,0,.14)); }
+.hero-txt { flex: 1; min-width: 0; }
+.hero h2 { margin: 0; font-size: 1.5rem; letter-spacing: -.01em; line-height: 1.2; }
+.hero .msg { margin: 4px 0 0; color: var(--muted); }
+.bar { height: 6px; background: color-mix(in srgb, var(--c) 16%, var(--surface)); border-radius: 99px; overflow: hidden; margin-top: 9px; }
+.bar i { display: block; height: 100%; width: 0; background: var(--c); border-radius: 99px; transition: width .5s; }
+.hero-tasks { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; margin-top: 14px; padding-top: 12px; border-top: 1px dashed color-mix(in srgb, var(--c) 35%, transparent); }
+.hero .side { padding: 0; }
+.hero-next { all: unset; cursor: pointer; display: inline-block; margin-top: 12px; font-size: .88rem; color: var(--muted); }
+.hero-next b { color: var(--text); }
+.hero-next:hover b, .hero-next:focus-visible b { text-decoration: underline; }
 
-/* Now card */
-.now {
-  background: var(--surface); border-radius: 18px; box-shadow: var(--shadow);
-  padding: 16px 18px; border-left: 6px solid var(--now-c, var(--accent)); margin-bottom: 14px;
-}
-.now .label { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--now-c, var(--accent)); }
-.now h2 { margin: 2px 0 6px; font-size: 1.3rem; }
-.now .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.now .who { font-size: .92rem; }
-.now .who b { display: block; font-size: .8rem; color: var(--muted); }
-.now .next { margin-top: 10px; font-size: .9rem; color: var(--muted); }
-.bar { height: 8px; background: var(--surface-2); border-radius: 99px; overflow: hidden; margin-top: 10px; }
-.bar > i { display: block; height: 100%; width: 0; background: var(--now-c, var(--accent)); border-radius: 99px; transition: width .4s; }
+/* ---------- Lembretes ---------- */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+.chips:empty { display: none; }
+.chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--line); border-radius: 99px; padding: 4px 12px 4px 6px; font-size: .84rem; font-weight: 700; }
+.chip img { width: 22px; height: 22px; }
 
-/* Reminders + progress */
-.row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
-.pill {
-  flex: 1 1 220px; background: var(--surface); border-radius: 14px; box-shadow: var(--shadow);
-  padding: 10px 14px; font-size: .9rem; display: flex; gap: 10px; align-items: center;
-}
-.pill .em { font-size: 1.4rem; }
-.pill b { display: block; }
-.prog-num { font-weight: 800; font-size: 1.1rem; }
-
-/* Controls */
-.controls { display: flex; gap: 8px; align-items: center; justify-content: space-between; flex-wrap: wrap; margin: 6px 0 12px; position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 8px 0; }
+/* ---------- Barra de ferramentas ---------- */
+.toolbar { position: sticky; top: 0; z-index: 5; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 0; background: var(--bg); margin-bottom: 8px; }
+.toolbar .sp { flex: 1; }
 .seg { display: inline-flex; background: var(--surface-2); border-radius: 12px; padding: 3px; }
-.seg button {
-  border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 700;
-  padding: 7px 14px; border-radius: 9px; cursor: pointer;
-}
+.seg button { border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 700; font-size: .9rem; padding: 6px 13px; border-radius: 9px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.seg button img { width: 18px; height: 18px; }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
-.controls .right { display: flex; gap: 8px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 11px; padding: 7px 12px; font: inherit; font-size: .88rem; font-weight: 700; cursor: pointer; }
+.btn:hover { background: var(--surface-2); }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--muted); }
+.btn.ghost:hover { background: var(--surface-2); color: var(--text); }
 
-/* Blocks */
-.block {
-  background: var(--surface); border-radius: 16px; box-shadow: var(--shadow);
-  margin-bottom: 12px; overflow: hidden; border: 2px solid transparent; scroll-margin-top: 70px;
+/* ---------- Linha do tempo ---------- */
+.slot {
+  --tint: color-mix(in srgb, var(--c) 11%, var(--surface));
+  position: relative; display: grid; grid-template-columns: 74px 1fr; gap: 0 26px;
+  padding-bottom: 12px; scroll-margin-top: 72px;
 }
-.slot.current .block { border-color: var(--c); }
-.slot.past { opacity: .72; }
+.slot::before { content: ""; position: absolute; left: 86px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+.slot:first-child::before { top: 22px; }
+.slot::after {
+  content: ""; position: absolute; left: 80px; top: 17px; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--bg); border: 3px solid var(--c); z-index: 1; transition: background .2s, box-shadow .2s;
+}
+.slot.done::after { background: var(--done); border-color: var(--done); }
+.slot.current::after { background: var(--c); box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) 22%, transparent); }
+.when { text-align: right; padding-top: 11px; }
+.when .ini { display: block; font-size: 1.2rem; font-weight: 800; color: var(--c); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.when .fim { display: block; font-size: .76rem; font-weight: 700; color: var(--muted); margin-top: 2px; white-space: nowrap; }
+.tile { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--tint); margin-top: 10px; }
+.tile img { width: 26px; height: 26px; }
+.slot.collapsed .tile { display: none; }
 
-/* Linha do tempo: horário ao lado */
-.slot { display: grid; grid-template-columns: 84px 1fr; gap: 0 14px; scroll-margin-top: 70px; }
-.when { position: relative; text-align: right; padding: 10px 0 0; }
-.when::after {
-  content: ""; position: absolute; top: 0; bottom: 0; right: -9px; width: 3px;
-  background: var(--line); border-radius: 3px;
-}
-.when::before {
-  content: ""; position: absolute; top: 16px; right: -15px; width: 15px; height: 15px; z-index: 1;
-  border-radius: 50%; background: var(--c); border: 3px solid var(--bg);
-}
-.slot.current .when::before { box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 35%, transparent); animation: pulse 2s infinite; }
-@keyframes pulse { 50% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--c) 10%, transparent); } }
-.when .ini { display: block; font-size: 1.35rem; font-weight: 800; color: var(--c); font-variant-numeric: tabular-nums; line-height: 1.1; padding-right: 12px; }
-.when .fim { display: block; font-size: .85rem; font-weight: 700; color: var(--muted); padding-right: 12px; }
-.when .dur { display: inline-block; margin: 6px 12px 0 0; font-size: .72rem; font-weight: 800; color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); padding: 2px 7px; border-radius: 99px; }
-.slot .block { margin-left: 8px; }
-.when-ill { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; margin-top: 10px; padding-right: 12px; }
-.when-ill img { width: 34px; height: 34px; object-fit: contain; filter: saturate(.55); opacity: .7; transition: opacity .3s, filter .3s; }
-.slot.current .when-ill img, .slot:hover .when-ill img { filter: none; opacity: 1; }
-.slot > *, .cols > *, .now .grid > * { min-width: 0; }
-@media (max-width: 680px) {
-  .slot { grid-template-columns: 58px 1fr; gap: 0 10px; }
-  .when .ini { font-size: 1.05rem; padding-right: 8px; }
-  .when .fim { font-size: .75rem; padding-right: 8px; }
-  .when .dur { margin-right: 8px; font-size: .65rem; padding: 1px 5px; }
-  .slot .block { margin-left: 4px; }
-  .when-ill { padding-right: 8px; gap: 4px; }
-  .when-ill img { width: 28px; height: 28px; }
-  header.top h1 { font-size: 1.1rem; }
-}
-.block .head {
-  background: var(--c); color: #fff; padding: 8px 14px; display: flex; align-items: center; gap: 10px;
-}
-:root[data-theme="dark"] .block .head { color: #1b1a1f; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .block .head { color: #1b1a1f; } }
-.block .time { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.block .title { font-weight: 700; flex: 1; }
-.block .badge { font-size: .72rem; font-weight: 800; text-transform: uppercase; background: rgba(255,255,255,.25); padding: 2px 8px; border-radius: 99px; }
-.block .cols { display: grid; grid-template-columns: 1fr 1fr; }
-.side { padding: 12px 14px 14px; }
-.side + .side { border-left: 1px solid var(--line); }
-.side .who { display: flex; align-items: center; gap: 8px; font-weight: 800; margin-bottom: 4px; }
-.side .who .em { font-size: 1.5rem; line-height: 1; }
-.side .who small { display: block; font-weight: 600; color: var(--muted); font-size: .78rem; }
-.side p { margin: 0 0 8px; color: var(--muted); font-size: .9rem; }
-.tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-.tasks label {
-  display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 10px; cursor: pointer;
-  background: var(--surface-2); font-size: .93rem; font-weight: 600; min-height: 40px;
-}
-.tasks input { width: 20px; height: 20px; accent-color: var(--done); flex: none; margin: 0; }
-.tasks input:checked + span { text-decoration: line-through; color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; transition: box-shadow .2s, border-color .2s, opacity .2s; }
+.slot.current .card { border-color: var(--c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--c) 16%, transparent), var(--shadow); }
+.slot.past:not(.current) .card { opacity: .72; }
+.slot.past:not(.current) .card:hover { opacity: 1; }
+.card-head { all: unset; box-sizing: border-box; width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; background: var(--tint); }
+.card-head:focus-visible { outline: 2px solid var(--c); outline-offset: -2px; border-radius: 18px; }
+.card-head .title { font-weight: 800; font-size: 1.02rem; flex: 1; min-width: 0; }
+.live { display: none; font-size: .66rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--on-c); background: var(--c); padding: 3px 8px; border-radius: 99px; }
+.slot.current .live { display: inline-block; }
+.meta { font-size: .8rem; color: var(--muted); font-weight: 700; white-space: nowrap; }
+.count { font-size: .74rem; font-weight: 800; padding: 3px 9px; border-radius: 99px; background: var(--surface); color: var(--c); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.slot.done .count { background: var(--done); color: var(--on-c); }
+.chev { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; transition: transform .25s; flex: none; }
+.slot.collapsed .chev { transform: rotate(-90deg); }
+.card-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .3s ease; }
+.slot.collapsed .card-body { grid-template-rows: 0fr; }
+.card-body > .cols { min-height: 0; overflow: hidden; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; }
+.side { padding: 14px 16px 14px; min-width: 0; }
+.cols .side + .side { border-left: 1px solid var(--line); }
+.side-h { display: flex; align-items: center; gap: 7px; font-size: .74rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 6px; }
+.side-h img { width: 20px; height: 20px; }
+.side-h span { text-transform: none; letter-spacing: 0; font-size: .82rem; font-weight: 700; color: var(--c); }
+.desc { margin: 0 0 8px; font-size: .87rem; color: var(--muted); line-height: 1.5; }
+
+/* Checklist */
+.tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+.task { position: relative; display: flex; align-items: center; gap: 10px; padding: 7px 8px; margin: 0 -8px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: .94rem; min-height: 40px; }
+.task:hover { background: var(--surface-2); }
+.task input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.box { flex: none; width: 22px; height: 22px; border-radius: 7px; border: 2px solid color-mix(in srgb, var(--c) 50%, var(--line)); display: grid; place-items: center; transition: background .15s, border-color .15s, transform .15s; }
+.box::after { content: ""; width: 5px; height: 10px; border: solid var(--on-c); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg) scale(0); margin-top: -3px; transition: transform .18s; }
+.task input:checked + .box { background: var(--c); border-color: var(--c); }
+.task input:checked + .box::after { transform: rotate(45deg) scale(1); }
+.task input:focus-visible + .box { outline: 2px solid var(--c); outline-offset: 2px; }
+.task:active .box { transform: scale(.88); }
+.task .txt { transition: color .2s; }
+.task input:checked ~ .txt { color: var(--muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 55%, transparent); }
+
+/* Fim da linha */
+.slot.end { padding-bottom: 0; }
+.slot.end::before { bottom: auto; height: 20px; }
+.end-card { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 18px; border: 1px dashed var(--line); color: var(--muted); font-weight: 700; }
+.end-card img { width: 28px; height: 28px; }
+
+/* Filtro */
 body.f-bebe .side.mae, body.f-mae .side.bebe { display: none; }
-body.f-bebe .block .cols, body.f-mae .block .cols { grid-template-columns: 1fr; }
-body.f-bebe .side + .side, body.f-mae .side + .side { border-left: 0; }
+body.f-bebe .cols, body.f-mae .cols, body.f-bebe .hero-tasks, body.f-mae .hero-tasks { grid-template-columns: 1fr; }
+body.f-mae .cols .side + .side { border-left: 0; }
 
-/* Ilustrações */
-.ill { display: flex; align-items: flex-end; gap: 2px; flex: none; }
-.ill img { width: 52px; height: 52px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(0,0,0,.12)); }
-.ill img:first-child { width: 64px; height: 64px; }
-.side .body { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
-.side .body p { margin: 0; flex: 1; }
-.avatar { width: 22px; height: 22px; object-fit: contain; flex: none; }
-.block .head img { width: 20px; height: 20px; }
-header.top .logo { display: flex; align-items: center; gap: 4px; }
-header.top .logo img { width: 38px; height: 38px; object-fit: contain; }
-.now .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.now .top .ill img, .now .top .ill img:first-child { width: 48px; height: 48px; filter: none; }
-.now .who b { display: flex; align-items: center; gap: 6px; }
-.now .who b img { width: 22px; height: 22px; }
-.pill img { width: 30px; height: 30px; object-fit: contain; flex: none; }
-.tip { display: flex; gap: 12px; align-items: flex-start; }
-.tip > img { width: 32px; height: 32px; object-fit: contain; flex: none; filter: saturate(.55); opacity: .75; }
-.seg button img { width: 18px; height: 18px; vertical-align: -3px; }
-.free img { width: 72px; height: 72px; display: block; margin: 0 auto 6px; }
-@media (max-width: 680px) {
-  .ill img { width: 42px; height: 42px; }
-  .ill img:first-child { width: 52px; height: 52px; }
-  .now .top .ill img { width: 48px; height: 48px; }
-  .now .top .ill img:first-child { width: 60px; height: 60px; }
-  header.top .logo img { width: 40px; height: 40px; }
-}
-@media print {
-  .when-ill img { width: 26px; height: 26px; }
-  .when-ill { margin-top: 4px; gap: 2px; }
-  .tip > img { width: 32px; height: 32px; }
-  header.top .logo img { width: 36px; height: 36px; }
-}
+/* ---------- Dicas ---------- */
+.tips h2 { font-size: 1.1rem; margin: 30px 0 10px; }
+.tip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tip { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; font-size: .88rem; color: var(--muted); }
+.tip b { display: block; color: var(--text); font-size: .98rem; margin-bottom: 3px; }
+.tip img { width: 30px; height: 30px; flex: none; }
+.tip.hot { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.tag { display: inline-block; font-size: .64rem; font-weight: 800; color: var(--on-c); background: var(--accent); text-transform: uppercase; letter-spacing: .06em; padding: 2px 7px; border-radius: 99px; margin-left: 6px; vertical-align: 2px; }
 
-.free { text-align: center; padding: 18px; color: var(--muted); font-weight: 700; }
-
-/* Tips */
-h3.sec { margin: 28px 0 10px; font-size: 1.15rem; }
-.tips { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.tip { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); padding: 14px; font-size: .92rem; }
-.tip b { display: block; margin-bottom: 4px; font-size: 1rem; }
-.tip.hot { outline: 2px solid var(--accent); }
-.tip .tag { display: inline-block; font-size: .72rem; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-left: 6px; }
-footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .8rem; }
+footer { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8rem; margin: 6px 0 0; }
 
 @media (max-width: 680px) {
-  header.top h1 { font-size: 1.25rem; }
-  .block .cols, .now .grid, .tips { grid-template-columns: 1fr; }
-  .side + .side { border-left: 0; border-top: 1px solid var(--line); }
-  .block .badge { display: none; }
+  .wrap { padding-top: 18px; }
+  .top h1 { font-size: 1.3rem; }
+  .ring { width: 64px; height: 64px; }
+  .hero { padding: 16px; }
+  .hero h2 { font-size: 1.25rem; }
+  .hero-ill img { width: 46px; height: 46px; }
+  .hero-tasks, .cols, .tip-grid { grid-template-columns: 1fr; }
+  .slot { grid-template-columns: 50px 1fr; gap: 0 22px; }
+  .slot::before { left: 60px; }
+  .slot::after { left: 54px; }
+  .when .ini { font-size: 1rem; }
+  .when .fim { font-size: .68rem; }
+  .tile { width: 34px; height: 34px; border-radius: 10px; }
+  .tile img { width: 22px; height: 22px; }
+  .cols .side + .side { border-left: 0; border-top: 1px solid var(--line); }
+  .card-head { padding: 11px 13px; gap: 8px; }
+  .card-head .title { font-size: .96rem; }
+  .meta { display: none; }
+  .side { padding: 12px 13px; }
 }
 
 @media print {
   @page { size: A4 landscape; margin: 8mm; }
-  :root { --bg: #fff; --surface: #fff; --surface-2: #fff; --shadow: none; }
-  body { font-size: 10.5px; }
-  .now, .row, .controls, footer, #reset, #theme { display: none !important; }
+  :root { --bg: #fff; --surface: #fff; --shadow: none; }
+  body { font-size: 10px; }
+  .hero, .chips, .toolbar, footer, .ring, .chev, .live { display: none !important; }
   .wrap { padding: 0; max-width: none; }
-  #blocks { columns: 2; column-gap: 8px; }
-  .slot { break-inside: avoid; }
-  .block { break-inside: avoid; margin-bottom: 6px; border: 1px solid #ddd; opacity: 1 !important; }
-  .block .head { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px 8px; }
-  .side { padding: 6px 8px; }
-  .side p { display: none; }
-  .tasks label { min-height: 0; padding: 1px 0; background: none; }
-  .tasks input { width: 12px; height: 12px; }
-  .tips { grid-template-columns: 1fr 1fr 1fr 1fr; }
-  h3.sec { margin: 8px 0 4px; }
+  .top { margin-bottom: 6px; }
+  #blocks { columns: 2; column-gap: 10px; }
+  .slot { break-inside: avoid; padding-bottom: 6px; }
+  .slot.collapsed .card-body { grid-template-rows: 1fr; }
+  .slot.collapsed .tile { display: inline-grid; }
+  .card { opacity: 1 !important; }
+  .card-head { padding: 5px 10px; }
+  .card-head, .tile, .box, .slot::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .desc { display: none; }
+  .side { padding: 5px 10px; }
+  .task { min-height: 0; padding: 1px 0; margin: 0; }
+  .box { width: 12px; height: 12px; border-radius: 3px; }
+  .tip-grid { grid-template-columns: repeat(4, 1fr); }
+  .tips h2 { margin: 8px 0 4px; }
 }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="logo">
-      <img src="img/alarm_clock.png" alt=""><img src="img/house.png" alt="">
-      <div>
-        <h1>Rotina: Bebê (1a4m) &amp; Mãe</h1>
-        <p class="sub" id="today"></p>
-      </div>
+    <div>
+      <div class="greet" id="greet"></div>
+      <h1 id="today"></h1>
+      <div class="sub">Rotina do bebê (1a4m) &amp; da mãe em home office</div>
     </div>
-    <button class="icon-btn" id="theme" title="Alternar tema claro/escuro">🌓</button>
+    <div class="ring" title="Tarefas concluídas hoje">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><circle class="trk" cx="32" cy="32" r="27"/><circle class="val" id="ringVal" cx="32" cy="32" r="27"/></svg>
+      <div class="ring-txt"><b id="ringNum">0</b><span id="ringTot"></span></div>
+    </div>
   </header>
 
-  <section class="now" id="now" aria-live="polite"></section>
+  <section class="hero" id="now" aria-live="polite"></section>
+  <div class="chips" id="chips"></div>
 
-  <div class="row" id="reminders"></div>
-
-  <div class="controls">
-    <div class="seg" role="group" aria-label="Filtrar">
+  <nav class="toolbar">
+    <div class="seg" role="group" aria-label="Mostrar">
       <button data-f="tudo" aria-pressed="true">Tudo</button>
-      <button data-f="bebe" aria-pressed="false"><img src="img/baby.png" alt=""> Bebê</button>
-      <button data-f="mae" aria-pressed="false"><img src="img/woman.png" alt=""> Mãe</button>
+      <button data-f="bebe" aria-pressed="false"><img src="img/baby.png" alt="">Bebê</button>
+      <button data-f="mae" aria-pressed="false"><img src="img/woman.png" alt="">Mãe</button>
     </div>
-    <div class="right">
-      <button class="icon-btn" id="goNow">📍 Agora</button>
-      <button class="icon-btn" id="print">🖨️</button>
-      <button class="icon-btn" id="reset">↺ Zerar dia</button>
-    </div>
-  </div>
+    <span class="sp"></span>
+    <button class="btn ghost" id="expand">Expandir tudo</button>
+    <button class="btn" id="goNow">📍 Agora</button>
+  </nav>
 
   <main id="blocks"></main>
 
-  <h3 class="sec">💡 Dicas para o dia fluir sem sobrecarga</h3>
-  <div class="tips" id="tips"></div>
+  <section class="tips">
+    <h2>Dicas para o dia fluir sem sobrecarga</h2>
+    <div class="tip-grid" id="tips"></div>
+  </section>
 
-  <footer>O checklist fica salvo neste aparelho e recomeça a cada novo dia.</footer>
+  <footer>
+    <button class="btn ghost" id="print">🖨️ Imprimir</button>
+    <button class="btn ghost" id="theme">🌓 Tema</button>
+    <button class="btn ghost" id="reset">↺ Recomeçar o dia</button>
+    <p>As marcações ficam salvas neste aparelho e recomeçam a cada novo dia.</p>
+  </footer>
 </div>
 
 <script>
 const ROTINA = [
-  { ini: "07:30", fim: "08:15", titulo: "Acordar e Leite", cor: "teal", icone: "🍼",
-    bebe: { em: "👶", txt: "Higiene matinal, troca de fralda e mamadeira/copo de leite com café da manhã leve (fruta picada ou pãozinho).",
+  { ini: "07:30", fim: "08:15", titulo: "Acordar e Leite", cor: "teal",
+    bebe: { txt: "Higiene matinal, troca de fralda e mamadeira/copo de leite com café da manhã leve (fruta picada ou pãozinho).",
             tasks: ["Higiene e troca de fralda", "Leite + fruta ou pãozinho"] },
-    mae:  { em: "☕", tit: "Início do dia", txt: "Tomar café junto, abrir janelas para luz natural e colocar a primeira carga na lava e seca (ciclo rápido ou diário).",
+    mae:  { tit: "Início do dia", txt: "Tomar café junto, abrir janelas para luz natural e colocar a primeira carga na lava e seca (ciclo rápido ou diário).",
             tasks: ["Tomar café juntos", "Abrir janelas", "1ª carga na lava e seca"] } },
-  { ini: "08:15", fim: "09:30", titulo: "Brincadeiras no Tapete (Autonomia)", cor: "teal", icone: "🧸",
-    bebe: { em: "🧱", txt: "Caixas de encaixe, blocos de montar, carrinhos ou panelinhas perto de você.",
+  { ini: "08:15", fim: "09:30", titulo: "Brincadeiras no Tapete", cor: "teal",
+    bebe: { txt: "Autonomia: caixas de encaixe, blocos de montar, carrinhos ou panelinhas perto de você.",
             tasks: ["Brincar no tapete (4–5 brinquedos)"] },
-    mae:  { em: "💻", tit: "Home Office · Bloco 1 (Foco Leve)", txt: "Responder mensagens, e-mails, checar tarefas e organizar as demandas do dia enquanto ele brinca ao lado.",
+    mae:  { tit: "Home Office · Bloco 1 (Foco Leve)", txt: "Responder mensagens, e-mails, checar tarefas e organizar as demandas do dia enquanto ele brinca ao lado.",
             tasks: ["Mensagens e e-mails", "Organizar demandas do dia"] } },
-  { ini: "09:30", fim: "10:00", titulo: "Lanche da Manhã", cor: "teal", icone: "🍎",
-    bebe: { em: "🍌", txt: "Fruta inteira ou amassada, bolinho caseiro sem açúcar ou iogurte natural + água.",
+  { ini: "09:30", fim: "10:00", titulo: "Lanche da Manhã", cor: "teal",
+    bebe: { txt: "Fruta inteira ou amassada, bolinho caseiro sem açúcar ou iogurte natural + água.",
             tasks: ["Lanche + água"] },
-    mae:  { em: "🧺", tit: "Pausa rápida", txt: "Preparar o lanche, tirar a roupa da lava e seca (ou iniciar a secagem) e dar uma olhada nos pré-preparos do almoço.",
+    mae:  { tit: "Pausa rápida", txt: "Preparar o lanche, tirar a roupa da lava e seca (ou iniciar a secagem) e dar uma olhada nos pré-preparos do almoço.",
             tasks: ["Tirar roupa da lava e seca", "Conferir pré-preparo do almoço"] } },
-  { ini: "10:00", fim: "11:15", titulo: "Passeio ao Ar Livre ou Brinquedoteca", cor: "teal", icone: "🌳",
-    bebe: { em: "🛝", txt: "Caminhada curta (passos de mãos dadas ou empurrando brinquedo), parquinho ou espaço kids.",
+  { ini: "10:00", fim: "11:15", titulo: "Passeio ao Ar Livre", cor: "teal",
+    bebe: { txt: "Caminhada curta (passos de mãos dadas ou empurrando brinquedo), parquinho, brinquedoteca ou espaço kids.",
             tasks: ["Passeio / parquinho / espaço kids"] },
-    mae:  { em: "☀️", tit: "Conexão e gasto de energia", txt: "Foco total nele para gastar energia física e garantir pressão de sono. Ao sair, ligue o robô aspirador na sala e nos quartos.",
+    mae:  { tit: "Conexão e gasto de energia", txt: "Foco total nele para gastar energia física e garantir pressão de sono. Ao sair, ligue o robô aspirador na sala e nos quartos.",
             tasks: ["Ligar robô aspirador ao sair", "Foco total no bebê"] } },
-  { ini: "11:15", fim: "12:15", titulo: "Almoço", cor: "orange", icone: "🍽️",
-    bebe: { em: "🥣", txt: "Comida da família (arroz, feijão, proteína desfiada/picada e legumes) na cadeira de alimentação.",
+  { ini: "11:15", fim: "12:15", titulo: "Almoço", cor: "orange",
+    bebe: { txt: "Comida da família (arroz, feijão, proteína desfiada/picada e legumes) na cadeira de alimentação.",
             tasks: ["Almoço na cadeirinha"] },
-    mae:  { em: "🍳", tit: "Finalizar e servir almoço", txt: "Aquecer ou finalizar a comida (air fryer ou panela de pressão para agilizar) e almoçar junto com ele.",
+    mae:  { tit: "Finalizar e servir", txt: "Aquecer ou finalizar a comida (air fryer ou panela de pressão para agilizar) e almoçar junto com ele.",
             tasks: ["Finalizar o almoço", "Almoçar juntos"] } },
-  { ini: "12:15", fim: "12:30", titulo: "Higiene e Desacelerar", cor: "pink", icone: "🪥",
-    bebe: { em: "🧷", txt: "Troca de fralda, escovar os dentes e fechar as cortinas do quarto.",
+  { ini: "12:15", fim: "12:30", titulo: "Higiene e Desacelerar", cor: "pink",
+    bebe: { txt: "Troca de fralda, escovar os dentes e fechar as cortinas do quarto.",
             tasks: ["Trocar fralda", "Escovar os dentes", "Fechar cortinas"] },
-    mae:  { em: "🎵", tit: "Preparar para a soneca", txt: "Ritual rápido de 10 minutos (música calma ou livro curto) para ele pegar no sono.",
+    mae:  { tit: "Preparar para a soneca", txt: "Ritual rápido de 10 minutos (música calma ou livro curto) para ele pegar no sono.",
             tasks: ["Ritual de 10 min (música/livro)"] } },
-  { ini: "12:30", fim: "14:30", titulo: "Soneca Única (2 horas)", cor: "pink", icone: "😴",
-    bebe: { em: "💤", txt: "Dormir no quarto escuro e silencioso. Acordar suavemente às 14h30 se passar do horário.",
+  { ini: "12:30", fim: "14:30", titulo: "Soneca Única", cor: "pink",
+    bebe: { txt: "Dormir no quarto escuro e silencioso. Acordar suavemente às 14h30 se passar do horário.",
             tasks: ["Soneca no quarto escuro"] },
-    mae:  { em: "🎧", tit: "Home Office · Bloco 2 (Foco Profundo)", txt: "Reuniões, desenvolvimento e tarefas que exigem silêncio e concentração máxima, sem interrupções.",
+    mae:  { tit: "Home Office · Bloco 2 (Foco Profundo)", txt: "Reuniões, desenvolvimento e tarefas que exigem silêncio e concentração máxima, sem interrupções.",
             tasks: ["Reuniões / trabalho focado"] } },
-  { ini: "14:30", fim: "15:00", titulo: "Acordar e Lanche da Tarde", cor: "orange", icone: "🥛",
-    bebe: { em: "🧀", txt: "Leite ou vitamina de fruta, biscoito de arroz ou pão de queijo caseiro + água.",
+  { ini: "14:30", fim: "15:00", titulo: "Acordar e Lanche da Tarde", cor: "orange",
+    bebe: { txt: "Leite ou vitamina de fruta, biscoito de arroz ou pão de queijo caseiro + água.",
             tasks: ["Lanche da tarde + água"] },
-    mae:  { em: "🌤️", tit: "Transição", txt: "Acordar o bebê com calma, trocar fralda e servir o lanche.",
+    mae:  { tit: "Transição", txt: "Acordar o bebê com calma, trocar fralda e servir o lanche.",
             tasks: ["Acordar com calma (até 14h30)", "Trocar fralda"] } },
-  { ini: "15:00", fim: "16:30", titulo: "Brincadeira Livre / Sensorial", cor: "pink", icone: "🎨",
-    bebe: { em: "📚", txt: "Livros cartonados, lousa mágica, massinha caseira ou brincar na cozinha com potes plásticos.",
+  { ini: "15:00", fim: "16:30", titulo: "Brincadeira Livre / Sensorial", cor: "pink",
+    bebe: { txt: "Livros cartonados, lousa mágica, massinha caseira ou brincar na cozinha com potes plásticos.",
             tasks: ["Brincadeira sensorial"] },
-    mae:  { em: "🔪", tit: "Home Office · Bloco 3 + Cozinha", txt: "Finalizar pendências no notebook enquanto ele explora os brinquedos, e adiantar o jantar (cortar legumes ou temperar a carne).",
+    mae:  { tit: "Home Office · Bloco 3 + Cozinha", txt: "Finalizar pendências no notebook enquanto ele explora os brinquedos, e adiantar o jantar (cortar legumes ou temperar a carne).",
             tasks: ["Fechar pendências do trabalho", "Adiantar o jantar"] } },
-  { ini: "16:30", fim: "17:30", titulo: "Leitura e Tapete", cor: "pink", icone: "📖",
-    bebe: { em: "🐻", txt: "Leitura interativa (apontando figuras e nomeando objetos) e brincadeiras mais calmas no tapete.",
+  { ini: "16:30", fim: "17:30", titulo: "Leitura e Tapete", cor: "pink",
+    bebe: { txt: "Leitura interativa (apontando figuras e nomeando objetos) e brincadeiras mais calmas no tapete.",
             tasks: ["Leitura interativa"] },
-    mae:  { em: "👕", tit: "Organização da casa", txt: "Dobrar a roupa, recolher os brinquedos com a ajuda dele (virando brincadeira) e passar o robô na cozinha/sala se necessário.",
+    mae:  { tit: "Organização da casa", txt: "Dobrar a roupa, recolher os brinquedos com a ajuda dele (virando brincadeira) e passar o robô na cozinha/sala se necessário.",
             tasks: ["Dobrar a roupa", "Recolher brinquedos juntos", "Robô na cozinha/sala"] } },
-  { ini: "17:30", fim: "18:30", titulo: "Banho e Jantar", cor: "purple", icone: "🛁",
-    bebe: { em: "🫧", txt: "Banho relaxante por volta das 17h30 e jantar às 18h00 (mesma base do almoço ou sopa/panqueca nutritiva).",
+  { ini: "17:30", fim: "18:30", titulo: "Banho e Jantar", cor: "purple",
+    bebe: { txt: "Banho relaxante por volta das 17h30 e jantar às 18h00 (mesma base do almoço ou sopa/panqueca nutritiva).",
             tasks: ["Banho (17h30)", "Jantar (18h00)"] },
-    mae:  { em: "🍲", tit: "Encerramento do dia", txt: "Dar o banho, servir o jantar, jantar em família e deixar a cozinha limpa (ou a louça encaminhada).",
+    mae:  { tit: "Encerramento do dia", txt: "Dar o banho, servir o jantar, jantar em família e deixar a cozinha limpa (ou a louça encaminhada).",
             tasks: ["Jantar em família", "Cozinha limpa / louça encaminhada"] } },
-  { ini: "18:30", fim: "19:30", titulo: "Ritual Noturno e Leite", cor: "navy", icone: "🌙",
-    bebe: { em: "🧸", txt: "Pijama, luz baixa, mamadeira/leite da noite, escovação e história curta no quarto.",
+  { ini: "18:30", fim: "19:30", titulo: "Ritual Noturno e Leite", cor: "navy",
+    bebe: { txt: "Pijama, luz baixa, mamadeira/leite da noite, escovação e história curta no quarto.",
             tasks: ["Pijama e luz baixa", "Leite da noite", "Escovar os dentes", "História curta"] },
-    mae:  { em: "🛏️", tit: "Descanso", txt: "Colocar o bebê para dormir entre 19h30 e 20h00 e ter a noite livre.",
+    mae:  { tit: "Descanso", txt: "Colocar o bebê para dormir entre 19h30 e 20h00 e ter a noite livre.",
             tasks: ["Bebê dormindo (19h30–20h)"] } },
 ];
-
-/* Ilustrações por bloco: [ícone do cabeçalho, [bebê...], [mãe...]] (Fluent Emoji 3D, MIT) */
-const ILUSTRA = [
-  ["baby_bottle",    ["baby", "baby_bottle", "red_apple"],          ["hot_beverage", "sun", "basket"]],
-  ["teddy_bear",     ["brick", "automobile", "teddy_bear"],         ["laptop", "e-mail", "alarm_clock"]],
-  ["red_apple",      ["banana", "cupcake", "glass_of_milk"],        ["timer_clock", "basket", "shallow_pan_of_food"]],
-  ["deciduous_tree", ["playground_slide", "person_walking", "deciduous_tree"], ["sun", "robot"]],
-  ["fork_and_knife_with_plate", ["bowl_with_spoon", "cooked_rice", "carrot"], ["cooking", "pot_of_food"]],
-  ["toothbrush",     ["toothbrush", "baby"],                         ["musical_note", "open_book"]],
-  ["sleeping_face",  ["person_in_bed", "zzz"],                       ["headphone", "laptop"]],
-  ["glass_of_milk",  ["glass_of_milk", "cheese_wedge", "cookie"],    ["sun_behind_cloud", "baby"]],
-  ["artist_palette", ["books", "artist_palette", "package"],         ["laptop", "kitchen_knife", "carrot"]],
-  ["open_book",      ["open_book", "teddy_bear"],                    ["t-shirt", "basket", "robot"]],
-  ["bathtub",        ["person_bathing", "bubbles", "soap"],          ["pot_of_food", "fork_and_knife_with_plate"]],
-  ["crescent_moon",  ["baby_bottle", "teddy_bear", "crescent_moon"], ["bed", "night_with_stars"]],
-];
-ROTINA.forEach((b, i) => { b.img = ILUSTRA[i][0]; b.bebe.imgs = ILUSTRA[i][1]; b.mae.imgs = ILUSTRA[i][2]; });
-const img = (n, alt = "") => `<img src="img/${n}.png" alt="${alt}" loading="lazy">`;
-const ill = list => `<div class="ill" aria-hidden="true">${list.map(n => img(n)).join("")}</div>`;
-const DICA_IMG = { lote: "pot_of_food", rodizio: "teddy_bear", auto: "robot", soneca: "stopwatch" };
-
+/* Ilustração de cada bloco (Fluent Emoji 3D, MIT) */
+const ILUSTRA = ["baby_bottle", "teddy_bear", "banana", "playground_slide", "bowl_with_spoon", "toothbrush",
+                 "zzz", "glass_of_milk", "artist_palette", "open_book", "bathtub", "crescent_moon"];
 const DICAS = [
-  { id: "lote", t: "🥘 Cozinha em lote", d: "Escolha dois dias (ex.: domingo e quarta) para cozinhar e congelar porções de feijão, carnes desfiadas e legumes picados. No dia a dia é só montar o prato ou finalizar na air fryer em 15 minutos." },
-  { id: "rodizio", t: "🔄 Rodízio de brinquedos", d: "Deixe só 4 ou 5 brinquedos no tapete e guarde o resto. Trocar a cada 3 dias renova o interesse dele e rende 30 a 40 minutos extras de concentração para você." },
-  { id: "auto", t: "🤖 Automação nas saídas", d: "Sempre que sair às 10h00, deixe a lava e seca batendo e o robô aspirador limpando a casa, com o chão livre de brinquedos." },
-  { id: "soneca", t: "⏱️ Teto rigoroso na soneca", d: "Para zerar os despertares de madrugada, não deixe a soneca passar das 14h30–15h00. Se dormir demais à tarde, ele perde o sono à noite." },
+  { id: "lote", img: "pot_of_food", t: "Cozinha em lote", d: "Escolha dois dias (ex.: domingo e quarta) para cozinhar e congelar porções de feijão, carnes desfiadas e legumes picados. No dia a dia é só montar o prato ou finalizar na air fryer em 15 minutos." },
+  { id: "rodizio", img: "teddy_bear", t: "Rodízio de brinquedos", d: "Deixe só 4 ou 5 brinquedos no tapete e guarde o resto. Trocar a cada 3 dias renova o interesse dele e rende 30 a 40 minutos extras de concentração para você." },
+  { id: "auto", img: "robot", t: "Automação nas saídas", d: "Sempre que sair às 10h00, deixe a lava e seca batendo e o robô aspirador limpando a casa, com o chão livre de brinquedos." },
+  { id: "soneca", img: "stopwatch", t: "Teto rigoroso na soneca", d: "Para zerar os despertares de madrugada, não deixe a soneca passar das 14h30–15h00. Se dormir demais à tarde, ele perde o sono à noite." },
 ];
 
 /* ---------- utilitários ---------- */
 const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const toMin = hm => { const [h, m] = hm.split(":").map(Number); return h * 60 + m; };
 const fmt = hm => hm.replace(":", "h");
+const fmtDur = d => d >= 60 ? `${Math.floor(d / 60)}h${d % 60 ? String(d % 60).padStart(2, "0") : ""}` : `${d} min`;
+const img = (n, alt = "") => `<img src="img/${n}.png" alt="${alt}">`;
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
   del(k) { try { localStorage.removeItem(k); } catch {} },
 };
 const dayKey = () => { const d = new Date(); return `rotina-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
-let checks = store.get(dayKey(), {});
 let currentDay = dayKey();
+let checks = store.get(currentDay, {});
+let manual = {};       // blocos que a pessoa abriu/fechou manualmente
+let heroKey = null;
+const nowMin = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
+const blockIds = i => [
+  ...ROTINA[i].bebe.tasks.map((_, j) => `${i}-bebe-${j}`),
+  ...ROTINA[i].mae.tasks.map((_, j) => `${i}-mae-${j}`),
+];
 
-/* ---------- render dos blocos ---------- */
+/* ---------- peças de HTML ---------- */
+const taskHTML = (id, t) =>
+  `<li><label class="task"><input type="checkbox" data-id="${id}" ${checks[id] ? "checked" : ""}><span class="box" aria-hidden="true"></span><span class="txt">${t}</span></label></li>`;
+const sideHTML = (i, who, s, withDesc) => `
+  <div class="side ${who}">
+    <div class="side-h">${img(who === "bebe" ? "baby" : "woman")}${who === "bebe" ? "Bebê" : "Mãe"}${s.tit ? `<span>· ${s.tit}</span>` : ""}</div>
+    ${withDesc ? `<p class="desc">${s.txt}</p>` : ""}
+    <ul class="tasks">${s.tasks.map((t, j) => taskHTML(`${i}-${who}-${j}`, t)).join("")}</ul>
+  </div>`;
+
 function renderBlocks() {
-  const html = ROTINA.map((b, i) => {
-    const side = (who, s) => `
-      <div class="side ${who}">
-        <div class="who"><img class="avatar" src="img/${who === "bebe" ? "baby" : "woman"}.png" alt="">
-          <div>${who === "bebe" ? "Bebê" : "Mãe"}${s.tit ? `<small>${s.tit}</small>` : ""}</div></div>
-        <p>${s.txt}</p>
-        <ul class="tasks">${s.tasks.map((t, j) => {
-          const id = `${i}-${who}-${j}`;
-          return `<li><label><input type="checkbox" data-id="${id}" ${checks[id] ? "checked" : ""}><span>${t}</span></label></li>`;
-        }).join("")}</ul>
-      </div>`;
-    const d = toMin(b.fim) - toMin(b.ini);
-    const dur = d >= 60 ? `${Math.floor(d / 60)}h${d % 60 ? String(d % 60).padStart(2, "0") : ""}` : `${d} min`;
-    return `
-      <section class="slot" id="b${i}" style="--c: var(--c-${b.cor})">
-        <div class="when"><span class="ini">${fmt(b.ini)}</span><span class="fim">até ${fmt(b.fim)}</span><span class="dur">${dur}</span><div class="when-ill" aria-hidden="true">${[...new Set([b.bebe.imgs[0], b.mae.imgs[0]])].map(n => img(n)).join("")}</div></div>
-        <article class="block">
-          <div class="head">${img(b.img)}<span class="title">${b.titulo}</span><span class="badge" hidden>Agora</span></div>
-          <div class="cols">${side("bebe", b.bebe)}${side("mae", b.mae)}</div>
-        </article>
-      </section>`;
-  }).join("") + `<div class="free" id="free">${img("night_with_stars")}19h30 em diante: noite livre. Bom descanso!</div>`;
-  $("#blocks").innerHTML = html;
-}
-
-function totalTasks() { return ROTINA.reduce((n, b) => n + b.bebe.tasks.length + b.mae.tasks.length, 0); }
-function doneTasks() { return Object.values(checks).filter(Boolean).length; }
-
-/* ---------- agora / próximo ---------- */
-function update() {
-  if (dayKey() !== currentDay) { currentDay = dayKey(); checks = store.get(currentDay, {}); renderBlocks(); }
-  const now = new Date();
-  const m = now.getHours() * 60 + now.getMinutes();
-  $("#today").textContent = now.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
-
-  let curIdx = ROTINA.findIndex(b => m >= toMin(b.ini) && m < toMin(b.fim));
-  ROTINA.forEach((b, i) => {
-    const el = $("#b" + i);
-    el.classList.toggle("current", i === curIdx);
-    el.classList.toggle("past", m >= toMin(b.fim));
-    $(".badge", el).hidden = i !== curIdx;
-  });
-
-  const now$ = $("#now");
-  if (curIdx >= 0) {
-    const b = ROTINA[curIdx], ini = toMin(b.ini), fim = toMin(b.fim);
-    const pct = Math.round((m - ini) / (fim - ini) * 100);
-    const resta = fim - m;
-    const prox = ROTINA[curIdx + 1];
-    now$.style.setProperty("--now-c", `var(--c-${b.cor})`);
-    now$.innerHTML = `
-      <div class="top"><div>
-        <div class="label">Agora · ${fmt(b.ini)} – ${fmt(b.fim)}</div>
-        <h2>${b.titulo}</h2></div>${ill([b.bebe.imgs[0], b.mae.imgs[0]])}</div>
-      <div class="grid">
-        <div class="who"><b>${img("baby")} Bebê</b>${b.bebe.txt}</div>
-        <div class="who"><b>${img("woman")} Mãe${b.mae.tit ? " · " + b.mae.tit : ""}</b>${b.mae.txt}</div>
+  $("#blocks").innerHTML = ROTINA.map((b, i) => `
+    <section class="slot" id="b${i}" style="--c: var(--c-${b.cor})">
+      <div class="when">
+        <span class="ini">${fmt(b.ini)}</span>
+        <span class="fim">até ${fmt(b.fim)}</span>
+        <span class="tile" aria-hidden="true">${img(ILUSTRA[i])}</span>
       </div>
-      <div class="bar"><i style="width:${pct}%"></i></div>
-      <div class="next">Faltam ${resta} min${prox ? ` · Próximo: <b>${fmt(prox.ini)} ${prox.titulo}</b>` : " · Depois: noite livre 🌙"}</div>`;
-  } else {
-    const first = ROTINA[0];
-    const before = m < toMin(first.ini);
-    now$.style.setProperty("--now-c", "var(--c-navy)");
-    now$.innerHTML = before
-      ? `<div class="top"><div><div class="label">Antes da rotina</div><h2>Hora de descansar</h2></div>${ill(["person_in_bed", "zzz"])}</div>
-         <div class="next">A rotina começa às <b>${fmt(first.ini)} – ${first.titulo}</b> (em ${toMin(first.ini) - m} min).</div>`
-      : `<div class="top"><div><div class="label">Fim do dia</div><h2>Noite livre</h2></div>${ill(["night_with_stars", "sparkles"])}</div>
-         <div class="next">Bebê dormindo entre 19h30 e 20h00. Amanhã a rotina recomeça às ${fmt(first.ini)}.</div>`;
-  }
-  renderReminders(now);
-}
-
-/* ---------- lembretes do dia ---------- */
-function renderReminders(now) {
-  const total = totalTasks(), done = doneTasks();
-  const dow = now.getDay(); // 0 dom, 3 qua
-  const lote = dow === 0 || dow === 3;
-  const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
-  const rodizio = doy % 3 === 0;
-  let html = `<div class="pill">${img("sparkles")}<div><b>Progresso de hoje</b>
-      <span class="prog-num">${done}/${total}</span> tarefas <div class="bar" style="width:140px"><i style="width:${Math.round(done/total*100)}%;background:var(--done)"></i></div></div></div>`;
-  if (lote) html += `<div class="pill">${img("pot_of_food")}<div><b>Hoje é dia de cozinha em lote</b>Congelar feijão, carnes desfiadas e legumes.</div></div>`;
-  if (rodizio) html += `<div class="pill">${img("teddy_bear")}<div><b>Dia de trocar os brinquedos</b>Deixe só 4 ou 5 novos no tapete.</div></div>`;
-  $("#reminders").innerHTML = html;
-  document.querySelectorAll(".tip").forEach(t => t.classList.toggle("hot", (t.dataset.id === "lote" && lote) || (t.dataset.id === "rodizio" && rodizio)));
-  document.querySelectorAll(".tip .tag").forEach(t => t.hidden = !t.closest(".tip").classList.contains("hot"));
+      <article class="card">
+        <button class="card-head" type="button" aria-expanded="true" data-i="${i}">
+          <span class="title">${b.titulo}</span>
+          <span class="live">Agora</span>
+          <span class="meta">${fmtDur(toMin(b.fim) - toMin(b.ini))}</span>
+          <span class="count"></span>
+          <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="card-body"><div class="cols">${sideHTML(i, "bebe", b.bebe, true)}${sideHTML(i, "mae", b.mae, true)}</div></div>
+      </article>
+    </section>`).join("") + `
+    <section class="slot end" id="fim" style="--c: var(--c-navy)">
+      <div class="when"><span class="ini">19h30</span></div>
+      <div class="end-card">${img("night_with_stars")}Noite livre — bebê dormindo até as 20h. Bom descanso!</div>
+    </section>`;
 }
 
 function renderTips() {
-  $("#tips").innerHTML = DICAS.map(d => `<div class="tip" data-id="${d.id}">${img(DICA_IMG[d.id])}<div><b>${d.t.replace(/^\S+\s/, "")}<span class="tag" hidden>hoje</span></b>${d.d}</div></div>`).join("");
+  $("#tips").innerHTML = DICAS.map(d =>
+    `<div class="tip" data-id="${d.id}">${img(d.img)}<div><b>${d.t}<span class="tag" hidden>hoje</span></b>${d.d}</div></div>`).join("");
+}
+
+function setCollapsed(i, c) {
+  const s = $("#b" + i);
+  s.classList.toggle("collapsed", c);
+  $(".card-head", s).setAttribute("aria-expanded", String(!c));
+}
+function syncExpandLabel() {
+  $("#expand").textContent = $(".slot.collapsed") ? "Expandir tudo" : "Recolher tudo";
+}
+
+/* ---------- progresso ---------- */
+function counts() {
+  let tot = 0, dn = 0;
+  ROTINA.forEach((_, i) => {
+    const ids = blockIds(i), d = ids.filter(id => checks[id]).length, s = $("#b" + i);
+    tot += ids.length; dn += d;
+    s.classList.toggle("done", d === ids.length);
+    $(".count", s).textContent = d === ids.length ? "✓ Feito" : `${d}/${ids.length}`;
+  });
+  $("#ringNum").textContent = dn;
+  $("#ringTot").textContent = `de ${tot}`;
+  $("#ringVal").style.strokeDashoffset = 169.65 * (1 - dn / tot);
+  const msg = $("#heroDone");
+  if (msg) msg.textContent = dn === tot ? "Todas as tarefas de hoje concluídas. 🎉" : `Você concluiu ${dn} de ${tot} tarefas hoje.`;
+}
+
+/* ---------- card "Agora" ---------- */
+function renderHero(cur, m) {
+  const hero = $("#now"), first = ROTINA[0];
+  const before = m < toMin(first.ini);
+  const key = cur >= 0 ? cur : before ? "antes" : "depois";
+  if (key !== heroKey) {
+    heroKey = key;
+    if (cur >= 0) {
+      const b = ROTINA[cur], prox = ROTINA[cur + 1];
+      hero.style.setProperty("--c", `var(--c-${b.cor})`);
+      hero.innerHTML = `
+        <div class="hero-top"><span class="pulse"></span>Agora · ${fmt(b.ini)} – ${fmt(b.fim)}<span class="left" id="heroLeft"></span></div>
+        <div class="hero-main">
+          <div class="hero-ill">${img(ILUSTRA[cur])}</div>
+          <div class="hero-txt"><h2>${b.titulo}</h2><div class="bar"><i id="heroBar"></i></div></div>
+        </div>
+        <div class="hero-tasks">${sideHTML(cur, "bebe", b.bebe, false)}${sideHTML(cur, "mae", b.mae, false)}</div>
+        ${prox ? `<button class="hero-next" data-go="${cur + 1}">A seguir: <b>${fmt(prox.ini)} · ${prox.titulo}</b> →</button>`
+               : `<div class="hero-next">A seguir: <b>noite livre</b> 🌙</div>`}`;
+    } else if (before) {
+      hero.style.setProperty("--c", "var(--c-navy)");
+      hero.innerHTML = `
+        <div class="hero-top"><span class="pulse"></span>Antes da rotina<span class="left" id="heroLeft"></span></div>
+        <div class="hero-main"><div class="hero-ill">${img("person_in_bed")}</div>
+          <div class="hero-txt"><h2>Ainda dá para descansar</h2><p class="msg">O dia começa às ${fmt(first.ini)} com <b>${first.titulo}</b>.</p></div></div>
+        <button class="hero-next" data-go="0">Ver o primeiro bloco →</button>`;
+    } else {
+      hero.style.setProperty("--c", "var(--c-navy)");
+      hero.innerHTML = `
+        <div class="hero-top"><span class="pulse"></span>Fim do dia</div>
+        <div class="hero-main"><div class="hero-ill">${img("night_with_stars")}</div>
+          <div class="hero-txt"><h2>Noite livre</h2><p class="msg" id="heroDone"></p></div></div>`;
+    }
+  }
+  if (cur >= 0) {
+    const b = ROTINA[cur], ini = toMin(b.ini), fim = toMin(b.fim);
+    $("#heroLeft").textContent = `faltam ${fmtDur(fim - m)}`;
+    $("#heroBar").style.width = `${Math.round((m - ini) / (fim - ini) * 100)}%`;
+  } else if (before) {
+    $("#heroLeft").textContent = `em ${fmtDur(toMin(first.ini) - m)}`;
+  }
+}
+
+/* ---------- lembretes do dia ---------- */
+function renderChips(now) {
+  const dow = now.getDay();
+  const lote = dow === 0 || dow === 3;
+  const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
+  const rodizio = doy % 3 === 0;
+  let html = "";
+  if (lote) html += `<span class="chip">${img("pot_of_food")}Hoje é dia de cozinha em lote</span>`;
+  if (rodizio) html += `<span class="chip">${img("teddy_bear")}Dia de trocar os brinquedos</span>`;
+  $("#chips").innerHTML = html;
+  $$(".tip").forEach(t => {
+    const hot = (t.dataset.id === "lote" && lote) || (t.dataset.id === "rodizio" && rodizio);
+    t.classList.toggle("hot", hot);
+    $(".tag", t).hidden = !hot;
+  });
+}
+
+/* ---------- ciclo principal ---------- */
+function update() {
+  if (dayKey() !== currentDay) {
+    currentDay = dayKey(); checks = store.get(currentDay, {}); manual = {}; heroKey = null; renderBlocks();
+  }
+  const now = new Date(), m = nowMin(), h = now.getHours();
+  const [sauda, icone] = h < 12 ? ["Bom dia", "sun"] : h < 18 ? ["Boa tarde", "sun_behind_cloud"] : ["Boa noite", "crescent_moon"];
+  $("#greet").innerHTML = `${img(icone)}${sauda}`;
+  const data = now.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
+  $("#today").textContent = data.charAt(0).toUpperCase() + data.slice(1);
+
+  const cur = ROTINA.findIndex(b => m >= toMin(b.ini) && m < toMin(b.fim));
+  const before = m < toMin(ROTINA[0].ini);
+  ROTINA.forEach((b, i) => {
+    const s = $("#b" + i);
+    s.classList.toggle("current", i === cur);
+    s.classList.toggle("past", m >= toMin(b.fim));
+    if (!(i in manual)) {
+      const open = cur >= 0 ? (i === cur || i === cur + 1) : before ? i <= 1 : false;
+      setCollapsed(i, !open);
+    }
+  });
+  renderHero(cur, m);
+  renderChips(now);
+  counts();
+  syncExpandLabel();
+}
+
+function goTo(i) {
+  manual[i] = false; setCollapsed(i, false); syncExpandLabel();
+  $("#b" + i).scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 /* ---------- eventos ---------- */
-$("#blocks").addEventListener("change", e => {
+document.addEventListener("change", e => {
   const id = e.target.dataset && e.target.dataset.id;
   if (!id) return;
   checks[id] = e.target.checked;
   store.set(currentDay, checks);
-  renderReminders(new Date());
+  $$(`input[data-id="${id}"]`).forEach(x => x.checked = e.target.checked);
+  counts();
 });
-document.querySelectorAll(".seg button").forEach(btn => btn.addEventListener("click", () => {
-  document.querySelectorAll(".seg button").forEach(b => b.setAttribute("aria-pressed", b === btn));
+$("#blocks").addEventListener("click", e => {
+  const head = e.target.closest(".card-head");
+  if (!head) return;
+  const i = +head.dataset.i, c = !$("#b" + i).classList.contains("collapsed");
+  manual[i] = c; setCollapsed(i, c); syncExpandLabel();
+});
+$("#now").addEventListener("click", e => {
+  const go = e.target.closest("[data-go]");
+  if (go) goTo(+go.dataset.go);
+});
+$$(".seg button").forEach(btn => btn.addEventListener("click", () => {
+  $$(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
   document.body.classList.remove("f-bebe", "f-mae");
   if (btn.dataset.f !== "tudo") document.body.classList.add("f-" + btn.dataset.f);
   store.set("rotina-filtro", btn.dataset.f);
 }));
+$("#expand").addEventListener("click", () => {
+  const abrir = !!$(".slot.collapsed");
+  ROTINA.forEach((_, i) => { manual[i] = !abrir; setCollapsed(i, !abrir); });
+  syncExpandLabel();
+});
 $("#goNow").addEventListener("click", () => {
-  const el = $(".slot.current") || $("#free");
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  const cur = ROTINA.findIndex(b => nowMin() >= toMin(b.ini) && nowMin() < toMin(b.fim));
+  if (cur >= 0) goTo(cur);
+  else if (nowMin() < toMin(ROTINA[0].ini)) goTo(0);
+  else $("#fim").scrollIntoView({ behavior: "smooth", block: "center" });
 });
 $("#print").addEventListener("click", () => window.print());
 $("#reset").addEventListener("click", () => {
   if (!confirm("Desmarcar todas as tarefas de hoje?")) return;
-  checks = {}; store.del(currentDay); renderBlocks(); update();
+  checks = {}; store.del(currentDay);
+  $$("input[data-id]").forEach(x => x.checked = false);
+  counts();
 });
 $("#theme").addEventListener("click", () => {
   const root = document.documentElement;
@@ -501,13 +589,11 @@ $("#theme").addEventListener("click", () => {
   if (tema) document.documentElement.dataset.theme = tema;
   renderTips();
   renderBlocks();
-  update();
   const f = store.get("rotina-filtro", "tudo");
-  const btn = document.querySelector(`.seg button[data-f="${f}"]`);
+  const btn = $(`.seg button[data-f="${f}"]`);
   if (btn) btn.click();
+  update();
   setInterval(update, 30000);
-  const cur = $(".slot.current");
-  if (cur) setTimeout(() => cur.scrollIntoView({ block: "center" }), 150);
 })();
 </script>
 </body>
