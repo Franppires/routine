@@ -8,3 +8,7 @@ App web (um único `index.html`) com a rotina diária do bebê (1a4m) e da mãe 
 - Lembretes: dia de cozinha em lote (dom/qua) e rodízio de brinquedos (a cada 3 dias)
 
 Para usar, abra o `index.html` no navegador.
+
+## Créditos
+
+Ilustrações: [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) (Microsoft, licença MIT), na pasta `img/`.

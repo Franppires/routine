@@ -98,8 +98,39 @@ header.top .sub { color: var(--muted); margin: 2px 0 0; font-weight: 600; text-t
   background: var(--surface); border-radius: 16px; box-shadow: var(--shadow);
   margin-bottom: 12px; overflow: hidden; border: 2px solid transparent; scroll-margin-top: 70px;
 }
-.block.current { border-color: var(--c); }
-.block.past { opacity: .78; }
+.slot.current .block { border-color: var(--c); }
+.slot.past { opacity: .72; }
+
+/* Linha do tempo: horário ao lado */
+.slot { display: grid; grid-template-columns: 84px 1fr; gap: 0 14px; scroll-margin-top: 70px; }
+.when { position: relative; text-align: right; padding: 10px 0 0; }
+.when::after {
+  content: ""; position: absolute; top: 0; bottom: 0; right: -9px; width: 3px;
+  background: var(--line); border-radius: 3px;
+}
+.when::before {
+  content: ""; position: absolute; top: 16px; right: -15px; width: 15px; height: 15px; z-index: 1;
+  border-radius: 50%; background: var(--c); border: 3px solid var(--bg);
+}
+.slot.current .when::before { box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 35%, transparent); animation: pulse 2s infinite; }
+@keyframes pulse { 50% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--c) 10%, transparent); } }
+.when .ini { display: block; font-size: 1.35rem; font-weight: 800; color: var(--c); font-variant-numeric: tabular-nums; line-height: 1.1; padding-right: 12px; }
+.when .fim { display: block; font-size: .85rem; font-weight: 700; color: var(--muted); padding-right: 12px; }
+.when .dur { display: inline-block; margin: 6px 12px 0 0; font-size: .72rem; font-weight: 800; color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); padding: 2px 7px; border-radius: 99px; }
+.slot .block { margin-left: 8px; }
+.when-ill { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; margin-top: 10px; padding-right: 12px; }
+.when-ill img { width: 46px; height: 46px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(0,0,0,.15)); }
+.slot > *, .cols > *, .now .grid > * { min-width: 0; }
+@media (max-width: 680px) {
+  .slot { grid-template-columns: 58px 1fr; gap: 0 10px; }
+  .when .ini { font-size: 1.05rem; padding-right: 8px; }
+  .when .fim { font-size: .75rem; padding-right: 8px; }
+  .when .dur { margin-right: 8px; font-size: .65rem; padding: 1px 5px; }
+  .slot .block { margin-left: 4px; }
+  .when-ill { padding-right: 8px; gap: 4px; }
+  .when-ill img { width: 40px; height: 40px; }
+  header.top h1 { font-size: 1.1rem; }
+}
 .block .head {
   background: var(--c); color: #fff; padding: 8px 14px; display: flex; align-items: center; gap: 10px;
 }
@@ -126,6 +157,40 @@ body.f-bebe .side.mae, body.f-mae .side.bebe { display: none; }
 body.f-bebe .block .cols, body.f-mae .block .cols { grid-template-columns: 1fr; }
 body.f-bebe .side + .side, body.f-mae .side + .side { border-left: 0; }
 
+/* Ilustrações */
+.ill { display: flex; align-items: flex-end; gap: 2px; flex: none; }
+.ill img { width: 52px; height: 52px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(0,0,0,.12)); }
+.ill img:first-child { width: 64px; height: 64px; }
+.side .body { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
+.side .body p { margin: 0; flex: 1; }
+.avatar { width: 30px; height: 30px; object-fit: contain; flex: none; }
+.block .head img { width: 26px; height: 26px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
+header.top .logo { display: flex; align-items: center; gap: 4px; }
+header.top .logo img { width: 54px; height: 54px; object-fit: contain; }
+.now .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.now .top .ill img { width: 64px; height: 64px; }
+.now .top .ill img:first-child { width: 84px; height: 84px; }
+.now .who b { display: flex; align-items: center; gap: 6px; }
+.now .who b img { width: 22px; height: 22px; }
+.pill img { width: 40px; height: 40px; object-fit: contain; flex: none; }
+.tip { display: flex; gap: 12px; align-items: flex-start; }
+.tip > img { width: 56px; height: 56px; object-fit: contain; flex: none; }
+.seg button img { width: 18px; height: 18px; vertical-align: -3px; }
+.free img { width: 72px; height: 72px; display: block; margin: 0 auto 6px; }
+@media (max-width: 680px) {
+  .ill img { width: 42px; height: 42px; }
+  .ill img:first-child { width: 52px; height: 52px; }
+  .now .top .ill img { width: 48px; height: 48px; }
+  .now .top .ill img:first-child { width: 60px; height: 60px; }
+  header.top .logo img { width: 40px; height: 40px; }
+}
+@media print {
+  .when-ill img { width: 26px; height: 26px; }
+  .when-ill { margin-top: 4px; gap: 2px; }
+  .tip > img { width: 32px; height: 32px; }
+  header.top .logo img { width: 36px; height: 36px; }
+}
+
 .free { text-align: center; padding: 18px; color: var(--muted); font-weight: 700; }
 
 /* Tips */
@@ -151,6 +216,7 @@ footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .
   .now, .row, .controls, footer, #reset, #theme { display: none !important; }
   .wrap { padding: 0; max-width: none; }
   #blocks { columns: 2; column-gap: 8px; }
+  .slot { break-inside: avoid; }
   .block { break-inside: avoid; margin-bottom: 6px; border: 1px solid #ddd; opacity: 1 !important; }
   .block .head { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px 8px; }
   .side { padding: 6px 8px; }
@@ -165,9 +231,12 @@ footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .
 <body>
 <div class="wrap">
   <header class="top">
-    <div>
-      <h1>⏰ Rotina: Bebê (1a4m) &amp; Mãe</h1>
-      <p class="sub" id="today"></p>
+    <div class="logo">
+      <img src="img/alarm_clock.png" alt=""><img src="img/house.png" alt="">
+      <div>
+        <h1>Rotina: Bebê (1a4m) &amp; Mãe</h1>
+        <p class="sub" id="today"></p>
+      </div>
     </div>
     <button class="icon-btn" id="theme" title="Alternar tema claro/escuro">🌓</button>
   </header>
@@ -179,8 +248,8 @@ footer { margin-top: 28px; text-align: center; color: var(--muted); font-size: .
   <div class="controls">
     <div class="seg" role="group" aria-label="Filtrar">
       <button data-f="tudo" aria-pressed="true">Tudo</button>
-      <button data-f="bebe" aria-pressed="false">👶 Bebê</button>
-      <button data-f="mae" aria-pressed="false">👩 Mãe</button>
+      <button data-f="bebe" aria-pressed="false"><img src="img/baby.png" alt=""> Bebê</button>
+      <button data-f="mae" aria-pressed="false"><img src="img/woman.png" alt=""> Mãe</button>
     </div>
     <div class="right">
       <button class="icon-btn" id="goNow">📍 Agora</button>
@@ -261,6 +330,26 @@ const ROTINA = [
             tasks: ["Bebê dormindo (19h30–20h)"] } },
 ];
 
+/* Ilustrações por bloco: [ícone do cabeçalho, [bebê...], [mãe...]] (Fluent Emoji 3D, MIT) */
+const ILUSTRA = [
+  ["baby_bottle",    ["baby", "baby_bottle", "red_apple"],          ["hot_beverage", "sun", "basket"]],
+  ["teddy_bear",     ["brick", "automobile", "teddy_bear"],         ["laptop", "e-mail", "alarm_clock"]],
+  ["red_apple",      ["banana", "cupcake", "glass_of_milk"],        ["timer_clock", "basket", "shallow_pan_of_food"]],
+  ["deciduous_tree", ["playground_slide", "person_walking", "deciduous_tree"], ["sun", "robot"]],
+  ["fork_and_knife_with_plate", ["bowl_with_spoon", "cooked_rice", "carrot"], ["cooking", "pot_of_food"]],
+  ["toothbrush",     ["toothbrush", "baby"],                         ["musical_note", "open_book"]],
+  ["sleeping_face",  ["person_in_bed", "zzz"],                       ["headphone", "laptop"]],
+  ["glass_of_milk",  ["glass_of_milk", "cheese_wedge", "cookie"],    ["sun_behind_cloud", "baby"]],
+  ["artist_palette", ["books", "artist_palette", "package"],         ["laptop", "kitchen_knife", "carrot"]],
+  ["open_book",      ["open_book", "teddy_bear"],                    ["t-shirt", "basket", "robot"]],
+  ["bathtub",        ["person_bathing", "bubbles", "soap"],          ["pot_of_food", "fork_and_knife_with_plate"]],
+  ["crescent_moon",  ["baby_bottle", "teddy_bear", "crescent_moon"], ["bed", "night_with_stars"]],
+];
+ROTINA.forEach((b, i) => { b.img = ILUSTRA[i][0]; b.bebe.imgs = ILUSTRA[i][1]; b.mae.imgs = ILUSTRA[i][2]; });
+const img = (n, alt = "") => `<img src="img/${n}.png" alt="${alt}" loading="lazy">`;
+const ill = list => `<div class="ill" aria-hidden="true">${list.map(n => img(n)).join("")}</div>`;
+const DICA_IMG = { lote: "pot_of_food", rodizio: "teddy_bear", auto: "robot", soneca: "stopwatch" };
+
 const DICAS = [
   { id: "lote", t: "🥘 Cozinha em lote", d: "Escolha dois dias (ex.: domingo e quarta) para cozinhar e congelar porções de feijão, carnes desfiadas e legumes picados. No dia a dia é só montar o prato ou finalizar na air fryer em 15 minutos." },
   { id: "rodizio", t: "🔄 Rodízio de brinquedos", d: "Deixe só 4 ou 5 brinquedos no tapete e guarde o resto. Trocar a cada 3 dias renova o interesse dele e rende 30 a 40 minutos extras de concentração para você." },
@@ -286,7 +375,7 @@ function renderBlocks() {
   const html = ROTINA.map((b, i) => {
     const side = (who, s) => `
       <div class="side ${who}">
-        <div class="who"><span class="em">${s.em}</span>
+        <div class="who"><img class="avatar" src="img/${who === "bebe" ? "baby" : "woman"}.png" alt="">
           <div>${who === "bebe" ? "Bebê" : "Mãe"}${s.tit ? `<small>${s.tit}</small>` : ""}</div></div>
         <p>${s.txt}</p>
         <ul class="tasks">${s.tasks.map((t, j) => {
@@ -294,13 +383,17 @@ function renderBlocks() {
           return `<li><label><input type="checkbox" data-id="${id}" ${checks[id] ? "checked" : ""}><span>${t}</span></label></li>`;
         }).join("")}</ul>
       </div>`;
+    const d = toMin(b.fim) - toMin(b.ini);
+    const dur = d >= 60 ? `${Math.floor(d / 60)}h${d % 60 ? String(d % 60).padStart(2, "0") : ""}` : `${d} min`;
     return `
-      <article class="block" id="b${i}" style="--c: var(--c-${b.cor})">
-        <div class="head"><span>${b.icone}</span><span class="time">${fmt(b.ini)} – ${fmt(b.fim)}</span>
-          <span class="title">${b.titulo}</span><span class="badge" hidden>Agora</span></div>
-        <div class="cols">${side("bebe", b.bebe)}${side("mae", b.mae)}</div>
-      </article>`;
-  }).join("") + `<div class="free" id="free">🌙 19h30 em diante: noite livre. Bom descanso!</div>`;
+      <section class="slot" id="b${i}" style="--c: var(--c-${b.cor})">
+        <div class="when"><span class="ini">${fmt(b.ini)}</span><span class="fim">até ${fmt(b.fim)}</span><span class="dur">${dur}</span><div class="when-ill" aria-hidden="true">${[...new Set([b.bebe.imgs[0], b.bebe.imgs[1], b.mae.imgs[0]])].filter(Boolean).map(n => img(n)).join("")}</div></div>
+        <article class="block">
+          <div class="head">${img(b.img)}<span class="title">${b.titulo}</span><span class="badge" hidden>Agora</span></div>
+          <div class="cols">${side("bebe", b.bebe)}${side("mae", b.mae)}</div>
+        </article>
+      </section>`;
+  }).join("") + `<div class="free" id="free">${img("night_with_stars")}19h30 em diante: noite livre. Bom descanso!</div>`;
   $("#blocks").innerHTML = html;
 }
 
@@ -330,11 +423,12 @@ function update() {
     const prox = ROTINA[curIdx + 1];
     now$.style.setProperty("--now-c", `var(--c-${b.cor})`);
     now$.innerHTML = `
-      <div class="label">Agora · ${fmt(b.ini)} – ${fmt(b.fim)}</div>
-      <h2>${b.icone} ${b.titulo}</h2>
+      <div class="top"><div>
+        <div class="label">Agora · ${fmt(b.ini)} – ${fmt(b.fim)}</div>
+        <h2>${b.titulo}</h2></div>${ill([b.bebe.imgs[0], b.mae.imgs[0]])}</div>
       <div class="grid">
-        <div class="who"><b>👶 Bebê</b>${b.bebe.txt}</div>
-        <div class="who"><b>👩 Mãe${b.mae.tit ? " · " + b.mae.tit : ""}</b>${b.mae.txt}</div>
+        <div class="who"><b>${img("baby")} Bebê</b>${b.bebe.txt}</div>
+        <div class="who"><b>${img("woman")} Mãe${b.mae.tit ? " · " + b.mae.tit : ""}</b>${b.mae.txt}</div>
       </div>
       <div class="bar"><i style="width:${pct}%"></i></div>
       <div class="next">Faltam ${resta} min${prox ? ` · Próximo: <b>${fmt(prox.ini)} ${prox.titulo}</b>` : " · Depois: noite livre 🌙"}</div>`;
@@ -343,9 +437,9 @@ function update() {
     const before = m < toMin(first.ini);
     now$.style.setProperty("--now-c", "var(--c-navy)");
     now$.innerHTML = before
-      ? `<div class="label">Antes da rotina</div><h2>😴 Hora de descansar</h2>
+      ? `<div class="top"><div><div class="label">Antes da rotina</div><h2>Hora de descansar</h2></div>${ill(["person_in_bed", "zzz"])}</div>
          <div class="next">A rotina começa às <b>${fmt(first.ini)} – ${first.titulo}</b> (em ${toMin(first.ini) - m} min).</div>`
-      : `<div class="label">Fim do dia</div><h2>🌙 Noite livre</h2>
+      : `<div class="top"><div><div class="label">Fim do dia</div><h2>Noite livre</h2></div>${ill(["night_with_stars", "sparkles"])}</div>
          <div class="next">Bebê dormindo entre 19h30 e 20h00. Amanhã a rotina recomeça às ${fmt(first.ini)}.</div>`;
   }
   renderReminders(now);
@@ -358,17 +452,17 @@ function renderReminders(now) {
   const lote = dow === 0 || dow === 3;
   const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
   const rodizio = doy % 3 === 0;
-  let html = `<div class="pill"><span class="em">✅</span><div><b>Progresso de hoje</b>
+  let html = `<div class="pill">${img("sparkles")}<div><b>Progresso de hoje</b>
       <span class="prog-num">${done}/${total}</span> tarefas <div class="bar" style="width:140px"><i style="width:${Math.round(done/total*100)}%;background:var(--done)"></i></div></div></div>`;
-  if (lote) html += `<div class="pill"><span class="em">🥘</span><div><b>Hoje é dia de cozinha em lote</b>Congelar feijão, carnes desfiadas e legumes.</div></div>`;
-  if (rodizio) html += `<div class="pill"><span class="em">🔄</span><div><b>Dia de trocar os brinquedos</b>Deixe só 4 ou 5 novos no tapete.</div></div>`;
+  if (lote) html += `<div class="pill">${img("pot_of_food")}<div><b>Hoje é dia de cozinha em lote</b>Congelar feijão, carnes desfiadas e legumes.</div></div>`;
+  if (rodizio) html += `<div class="pill">${img("teddy_bear")}<div><b>Dia de trocar os brinquedos</b>Deixe só 4 ou 5 novos no tapete.</div></div>`;
   $("#reminders").innerHTML = html;
   document.querySelectorAll(".tip").forEach(t => t.classList.toggle("hot", (t.dataset.id === "lote" && lote) || (t.dataset.id === "rodizio" && rodizio)));
   document.querySelectorAll(".tip .tag").forEach(t => t.hidden = !t.closest(".tip").classList.contains("hot"));
 }
 
 function renderTips() {
-  $("#tips").innerHTML = DICAS.map(d => `<div class="tip" data-id="${d.id}"><b>${d.t}<span class="tag" hidden>hoje</span></b>${d.d}</div>`).join("");
+  $("#tips").innerHTML = DICAS.map(d => `<div class="tip" data-id="${d.id}">${img(DICA_IMG[d.id])}<div><b>${d.t.replace(/^\S+\s/, "")}<span class="tag" hidden>hoje</span></b>${d.d}</div></div>`).join("");
 }
 
 /* ---------- eventos ---------- */
@@ -386,7 +480,7 @@ document.querySelectorAll(".seg button").forEach(btn => btn.addEventListener("cl
   store.set("rotina-filtro", btn.dataset.f);
 }));
 $("#goNow").addEventListener("click", () => {
-  const el = $(".block.current") || $("#free");
+  const el = $(".slot.current") || $("#free");
   el.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 $("#print").addEventListener("click", () => window.print());
@@ -412,7 +506,7 @@ $("#theme").addEventListener("click", () => {
   const btn = document.querySelector(`.seg button[data-f="${f}"]`);
   if (btn) btn.click();
   setInterval(update, 30000);
-  const cur = $(".block.current");
+  const cur = $(".slot.current");
   if (cur) setTimeout(() => cur.scrollIntoView({ block: "center" }), 150);
 })();
 </script>
