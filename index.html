@@ -110,13 +110,13 @@ img { object-fit: contain; }
 /* ---------- Linha do tempo ---------- */
 .slot {
   --tint: color-mix(in srgb, var(--c) 11%, var(--surface));
-  position: relative; display: grid; grid-template-columns: 74px 1fr; gap: 0 26px;
-  padding-bottom: 12px; scroll-margin-top: 72px;
+  position: relative; display: grid; grid-template-columns: 74px 1fr; gap: 0 34px;
+  padding-bottom: 16px; scroll-margin-top: 72px;
 }
-.slot::before { content: ""; position: absolute; left: 86px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+.slot::before { content: ""; position: absolute; left: 90px; top: 0; bottom: 0; width: 2px; background: var(--line); }
 .slot:first-child::before { top: 22px; }
 .slot::after {
-  content: ""; position: absolute; left: 80px; top: 17px; width: 14px; height: 14px; border-radius: 50%;
+  content: ""; position: absolute; left: 84px; top: 17px; width: 14px; height: 14px; border-radius: 50%;
   background: var(--bg); border: 3px solid var(--c); z-index: 1; transition: background .2s, box-shadow .2s;
 }
 .slot.done::after { background: var(--done); border-color: var(--done); }
@@ -148,13 +148,13 @@ img { object-fit: contain; }
 .cols { display: grid; grid-template-columns: 1fr 1fr; }
 .side { padding: 14px 16px 14px; min-width: 0; }
 .cols .side + .side { border-left: 1px solid var(--line); }
-.side-h { display: flex; align-items: center; gap: 7px; font-size: .74rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 6px; }
+.side-h { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 7px; font-size: .74rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
 .side-h img { width: 20px; height: 20px; }
 .side-h span { text-transform: none; letter-spacing: 0; font-size: .82rem; font-weight: 700; color: var(--c); }
-.desc { margin: 0 0 8px; font-size: .87rem; color: var(--muted); line-height: 1.5; }
+.desc { margin: 0 0 12px; font-size: .87rem; color: var(--muted); line-height: 1.5; }
 
 /* Checklist */
-.tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+.tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .task { position: relative; display: flex; align-items: center; gap: 10px; padding: 7px 8px; margin: 0 -8px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: .94rem; min-height: 40px; }
 .task:hover { background: var(--surface-2); }
 .task input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
@@ -202,22 +202,21 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   .top { margin-bottom: 24px; }
   .top h1 { font-size: 1.9rem; }
   .ring { width: 88px; height: 88px; }
-  .layout { display: grid; grid-template-columns: minmax(360px, 420px) 1fr; gap: 36px; align-items: start; }
-  .aside {
-    display: flex; flex-direction: column; gap: 0; position: sticky; top: 20px;
-    max-height: calc(100vh - 40px); overflow-y: auto; scrollbar-width: thin; padding: 2px 4px 2px 2px; margin: -2px -4px -2px -2px;
-  }
+  .layout { display: grid; grid-template-columns: minmax(340px, 400px) 1fr; gap: 48px; align-items: start; }
+  .aside { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 24px; }
+  .hero { margin-bottom: 8px; }
   .hero-tasks { grid-template-columns: 1fr; gap: 10px; }
   .hero h2 { font-size: 1.6rem; }
-  .tips h2 { margin-top: 22px; font-size: 1rem; }
-  .tip-grid { grid-template-columns: 1fr; gap: 8px; }
-  .tip { padding: 12px; font-size: .84rem; }
+  .tips { padding-left: 124px; }
+  .tips h2 { margin-top: 36px; }
+  .tip-grid { gap: 12px; }
   footer { justify-content: flex-start; margin-top: 16px; }
   footer p { text-align: left; padding-left: 12px; }
   .toolbar { padding-top: 0; }
-  .slot { grid-template-columns: 84px 1fr; gap: 0 30px; padding-bottom: 14px; }
-  .slot::before { left: 98px; }
-  .slot::after { left: 92px; }
+  .slot { grid-template-columns: 84px 1fr; gap: 0 40px; padding-bottom: 20px; }
+  .slot::before { left: 103px; }
+  .slot::after { left: 97px; top: 20px; }
+  .when { padding-top: 14px; }
   .when .ini { font-size: 1.35rem; }
   .card-head { padding: 14px 20px; }
   .card-head .title { font-size: 1.1rem; }
@@ -234,9 +233,9 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   .hero h2 { font-size: 1.25rem; }
   .hero-ill img { width: 46px; height: 46px; }
   .hero-tasks, .cols, .tip-grid { grid-template-columns: 1fr; }
-  .slot { grid-template-columns: 50px 1fr; gap: 0 22px; }
-  .slot::before { left: 60px; }
-  .slot::after { left: 54px; }
+  .slot { grid-template-columns: 54px 1fr; gap: 0 30px; padding-bottom: 14px; }
+  .slot::before { left: 68px; }
+  .slot::after { left: 62px; }
   .when .ini { font-size: 1rem; }
   .when .fim { font-size: .68rem; }
   .tile { width: 34px; height: 34px; border-radius: 10px; }
@@ -291,10 +290,6 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   <aside class="aside">
   <section class="hero" id="now" aria-live="polite"></section>
   <div class="chips" id="chips"></div>
-  <section class="tips">
-    <h2>Dicas para o dia fluir sem sobrecarga</h2>
-    <div class="tip-grid" id="tips"></div>
-  </section>
   <footer>
     <button class="btn ghost" id="print">🖨️ Imprimir</button>
     <button class="btn ghost" id="theme">🌓 Tema</button>
@@ -316,6 +311,10 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   </nav>
 
   <main id="blocks"></main>
+  <section class="tips">
+    <h2>Dicas para o dia fluir sem sobrecarga</h2>
+    <div class="tip-grid" id="tips"></div>
+  </section>
   </div>
   </div>
 </div>
