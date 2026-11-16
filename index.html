@@ -119,7 +119,8 @@ header.top .sub { color: var(--muted); margin: 2px 0 0; font-weight: 600; text-t
 .when .dur { display: inline-block; margin: 6px 12px 0 0; font-size: .72rem; font-weight: 800; color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); padding: 2px 7px; border-radius: 99px; }
 .slot .block { margin-left: 8px; }
 .when-ill { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; margin-top: 10px; padding-right: 12px; }
-.when-ill img { width: 46px; height: 46px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(0,0,0,.15)); }
+.when-ill img { width: 34px; height: 34px; object-fit: contain; filter: saturate(.55); opacity: .7; transition: opacity .3s, filter .3s; }
+.slot.current .when-ill img, .slot:hover .when-ill img { filter: none; opacity: 1; }
 .slot > *, .cols > *, .now .grid > * { min-width: 0; }
 @media (max-width: 680px) {
   .slot { grid-template-columns: 58px 1fr; gap: 0 10px; }
@@ -128,7 +129,7 @@ header.top .sub { color: var(--muted); margin: 2px 0 0; font-weight: 600; text-t
   .when .dur { margin-right: 8px; font-size: .65rem; padding: 1px 5px; }
   .slot .block { margin-left: 4px; }
   .when-ill { padding-right: 8px; gap: 4px; }
-  .when-ill img { width: 40px; height: 40px; }
+  .when-ill img { width: 28px; height: 28px; }
   header.top h1 { font-size: 1.1rem; }
 }
 .block .head {
@@ -163,18 +164,17 @@ body.f-bebe .side + .side, body.f-mae .side + .side { border-left: 0; }
 .ill img:first-child { width: 64px; height: 64px; }
 .side .body { display: flex; gap: 12px; align-items: center; margin-bottom: 8px; }
 .side .body p { margin: 0; flex: 1; }
-.avatar { width: 30px; height: 30px; object-fit: contain; flex: none; }
-.block .head img { width: 26px; height: 26px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.2)); }
+.avatar { width: 22px; height: 22px; object-fit: contain; flex: none; }
+.block .head img { width: 20px; height: 20px; }
 header.top .logo { display: flex; align-items: center; gap: 4px; }
-header.top .logo img { width: 54px; height: 54px; object-fit: contain; }
+header.top .logo img { width: 38px; height: 38px; object-fit: contain; }
 .now .top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.now .top .ill img { width: 64px; height: 64px; }
-.now .top .ill img:first-child { width: 84px; height: 84px; }
+.now .top .ill img, .now .top .ill img:first-child { width: 48px; height: 48px; filter: none; }
 .now .who b { display: flex; align-items: center; gap: 6px; }
 .now .who b img { width: 22px; height: 22px; }
-.pill img { width: 40px; height: 40px; object-fit: contain; flex: none; }
+.pill img { width: 30px; height: 30px; object-fit: contain; flex: none; }
 .tip { display: flex; gap: 12px; align-items: flex-start; }
-.tip > img { width: 56px; height: 56px; object-fit: contain; flex: none; }
+.tip > img { width: 32px; height: 32px; object-fit: contain; flex: none; filter: saturate(.55); opacity: .75; }
 .seg button img { width: 18px; height: 18px; vertical-align: -3px; }
 .free img { width: 72px; height: 72px; display: block; margin: 0 auto 6px; }
 @media (max-width: 680px) {
@@ -387,7 +387,7 @@ function renderBlocks() {
     const dur = d >= 60 ? `${Math.floor(d / 60)}h${d % 60 ? String(d % 60).padStart(2, "0") : ""}` : `${d} min`;
     return `
       <section class="slot" id="b${i}" style="--c: var(--c-${b.cor})">
-        <div class="when"><span class="ini">${fmt(b.ini)}</span><span class="fim">até ${fmt(b.fim)}</span><span class="dur">${dur}</span><div class="when-ill" aria-hidden="true">${[...new Set([b.bebe.imgs[0], b.bebe.imgs[1], b.mae.imgs[0]])].filter(Boolean).map(n => img(n)).join("")}</div></div>
+        <div class="when"><span class="ini">${fmt(b.ini)}</span><span class="fim">até ${fmt(b.fim)}</span><span class="dur">${dur}</span><div class="when-ill" aria-hidden="true">${[...new Set([b.bebe.imgs[0], b.mae.imgs[0]])].map(n => img(n)).join("")}</div></div>
         <article class="block">
           <div class="head">${img(b.img)}<span class="title">${b.titulo}</span><span class="badge" hidden>Agora</span></div>
           <div class="cols">${side("bebe", b.bebe)}${side("mae", b.mae)}</div>
