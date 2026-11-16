@@ -184,11 +184,47 @@ body.f-mae .cols .side + .side { border-left: 0; }
 .tip { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; font-size: .88rem; color: var(--muted); }
 .tip b { display: block; color: var(--text); font-size: .98rem; margin-bottom: 3px; }
 .tip img { width: 30px; height: 30px; flex: none; }
+.tag[hidden] { display: none; }
 .tip.hot { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
 .tag { display: inline-block; font-size: .64rem; font-weight: 800; color: var(--on-c); background: var(--accent); text-transform: uppercase; letter-spacing: .06em; padding: 2px 7px; border-radius: 99px; margin-left: 6px; vertical-align: 2px; }
 
 footer { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
 footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8rem; margin: 6px 0 0; }
+
+/* ---------- Layout: 1 coluna (celular/tablet) ---------- */
+.layout { display: flex; flex-direction: column; }
+.aside { display: contents; }
+.hero { order: 1; } .chips { order: 2; } .main { order: 3; } .tips { order: 4; } footer { order: 5; }
+
+/* ---------- Layout: 2 colunas (computador) ---------- */
+@media (min-width: 1100px) {
+  .wrap { max-width: 1480px; padding: 32px 40px 48px; }
+  .top { margin-bottom: 24px; }
+  .top h1 { font-size: 1.9rem; }
+  .ring { width: 88px; height: 88px; }
+  .layout { display: grid; grid-template-columns: minmax(360px, 420px) 1fr; gap: 36px; align-items: start; }
+  .aside {
+    display: flex; flex-direction: column; gap: 0; position: sticky; top: 20px;
+    max-height: calc(100vh - 40px); overflow-y: auto; scrollbar-width: thin; padding: 2px 4px 2px 2px; margin: -2px -4px -2px -2px;
+  }
+  .hero-tasks { grid-template-columns: 1fr; gap: 10px; }
+  .hero h2 { font-size: 1.6rem; }
+  .tips h2 { margin-top: 22px; font-size: 1rem; }
+  .tip-grid { grid-template-columns: 1fr; gap: 8px; }
+  .tip { padding: 12px; font-size: .84rem; }
+  footer { justify-content: flex-start; margin-top: 16px; }
+  footer p { text-align: left; padding-left: 12px; }
+  .toolbar { padding-top: 0; }
+  .slot { grid-template-columns: 84px 1fr; gap: 0 30px; padding-bottom: 14px; }
+  .slot::before { left: 98px; }
+  .slot::after { left: 92px; }
+  .when .ini { font-size: 1.35rem; }
+  .card-head { padding: 14px 20px; }
+  .card-head .title { font-size: 1.1rem; }
+  .side { padding: 16px 20px 18px; }
+  .desc { font-size: .92rem; }
+  .task { font-size: 1rem; }
+}
 
 @media (max-width: 680px) {
   .wrap { padding-top: 18px; }
@@ -217,6 +253,7 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   :root { --bg: #fff; --surface: #fff; --shadow: none; }
   body { font-size: 10px; }
   .hero, .chips, .toolbar, footer, .ring, .chev, .live { display: none !important; }
+  .layout { display: block; } .aside { display: contents; position: static; max-height: none; }
   .wrap { padding: 0; max-width: none; }
   .top { margin-bottom: 6px; }
   #blocks { columns: 2; column-gap: 10px; }
@@ -250,9 +287,23 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
     </div>
   </header>
 
+  <div class="layout">
+  <aside class="aside">
   <section class="hero" id="now" aria-live="polite"></section>
   <div class="chips" id="chips"></div>
+  <section class="tips">
+    <h2>Dicas para o dia fluir sem sobrecarga</h2>
+    <div class="tip-grid" id="tips"></div>
+  </section>
+  <footer>
+    <button class="btn ghost" id="print">🖨️ Imprimir</button>
+    <button class="btn ghost" id="theme">🌓 Tema</button>
+    <button class="btn ghost" id="reset">↺ Recomeçar o dia</button>
+    <p>As marcações ficam salvas neste aparelho e recomeçam a cada novo dia.</p>
+  </footer>
+  </aside>
 
+  <div class="main">
   <nav class="toolbar">
     <div class="seg" role="group" aria-label="Mostrar">
       <button data-f="tudo" aria-pressed="true">Tudo</button>
@@ -265,18 +316,8 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   </nav>
 
   <main id="blocks"></main>
-
-  <section class="tips">
-    <h2>Dicas para o dia fluir sem sobrecarga</h2>
-    <div class="tip-grid" id="tips"></div>
-  </section>
-
-  <footer>
-    <button class="btn ghost" id="print">🖨️ Imprimir</button>
-    <button class="btn ghost" id="theme">🌓 Tema</button>
-    <button class="btn ghost" id="reset">↺ Recomeçar o dia</button>
-    <p>As marcações ficam salvas neste aparelho e recomeçam a cada novo dia.</p>
-  </footer>
+  </div>
+  </div>
 </div>
 
 <script>
