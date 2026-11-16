@@ -194,35 +194,34 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
 /* ---------- Layout: 1 coluna (celular/tablet) ---------- */
 .layout { display: flex; flex-direction: column; }
 .aside { display: contents; }
-.hero { order: 1; } .chips { order: 2; } .main { order: 3; } .tips { order: 4; } footer { order: 5; }
+.hero { order: 1; } .chips { order: 2; } .main { order: 3; } footer { order: 5; }
 
-/* ---------- Layout: 2 colunas (computador) ---------- */
+/* ---------- Computador: coluna única, larga e arejada ---------- */
 @media (min-width: 1100px) {
-  .wrap { max-width: 1480px; padding: 32px 40px 48px; }
-  .top { margin-bottom: 24px; }
+  .wrap { max-width: 1180px; padding: 40px 48px 56px; }
+  .top { margin-bottom: 28px; }
   .top h1 { font-size: 1.9rem; }
   .ring { width: 88px; height: 88px; }
-  .layout { display: grid; grid-template-columns: minmax(340px, 400px) 1fr; gap: 48px; align-items: start; }
-  .aside { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 24px; }
-  .hero { margin-bottom: 8px; }
-  .hero-tasks { grid-template-columns: 1fr; gap: 10px; }
-  .hero h2 { font-size: 1.6rem; }
-  .tips { padding-left: 124px; }
-  .tips h2 { margin-top: 36px; }
-  .tip-grid { gap: 12px; }
-  footer { justify-content: flex-start; margin-top: 16px; }
-  footer p { text-align: left; padding-left: 12px; }
-  .toolbar { padding-top: 0; }
+  .hero { padding: 24px 28px; margin-bottom: 14px; }
+  .hero.has-tasks { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 0 32px; align-items: center; }
+  .hero.has-tasks .hero-tasks { margin: 0; padding: 4px 0 4px 32px; border-top: 0; border-left: 1px dashed color-mix(in srgb, var(--c) 35%, transparent); gap: 10px 24px; }
+  .hero h2 { font-size: 1.7rem; }
+  .hero-ill img { width: 64px; height: 64px; }
+  .chips { margin-bottom: 8px; }
+  .toolbar { padding: 14px 0; margin-bottom: 12px; }
   .slot { grid-template-columns: 84px 1fr; gap: 0 40px; padding-bottom: 20px; }
   .slot::before { left: 103px; }
   .slot::after { left: 97px; top: 20px; }
   .when { padding-top: 14px; }
   .when .ini { font-size: 1.35rem; }
-  .card-head { padding: 14px 20px; }
+  .card-head { padding: 14px 22px; }
   .card-head .title { font-size: 1.1rem; }
-  .side { padding: 16px 20px 18px; }
+  .side { padding: 18px 22px 20px; }
   .desc { font-size: .92rem; }
   .task { font-size: 1rem; }
+  .tips { padding-left: 124px; }
+  .tips h2 { margin-top: 40px; }
+  .tip-grid { gap: 12px; }
 }
 
 @media (max-width: 680px) {
@@ -487,18 +486,21 @@ function renderHero(cur, m) {
   const key = cur >= 0 ? cur : before ? "antes" : "depois";
   if (key !== heroKey) {
     heroKey = key;
+    hero.classList.toggle("has-tasks", cur >= 0);
     if (cur >= 0) {
       const b = ROTINA[cur], prox = ROTINA[cur + 1];
       hero.style.setProperty("--c", `var(--c-${b.cor})`);
       hero.innerHTML = `
+        <div class="hero-info">
         <div class="hero-top"><span class="pulse"></span>Agora · ${fmt(b.ini)} – ${fmt(b.fim)}<span class="left" id="heroLeft"></span></div>
         <div class="hero-main">
           <div class="hero-ill">${img(ILUSTRA[cur])}</div>
           <div class="hero-txt"><h2>${b.titulo}</h2><div class="bar"><i id="heroBar"></i></div></div>
         </div>
-        <div class="hero-tasks">${sideHTML(cur, "bebe", b.bebe, false)}${sideHTML(cur, "mae", b.mae, false)}</div>
         ${prox ? `<button class="hero-next" data-go="${cur + 1}">A seguir: <b>${fmt(prox.ini)} · ${prox.titulo}</b> →</button>`
-               : `<div class="hero-next">A seguir: <b>noite livre</b> 🌙</div>`}`;
+               : `<div class="hero-next">A seguir: <b>noite livre</b> 🌙</div>`}
+        </div>
+        <div class="hero-tasks">${sideHTML(cur, "bebe", b.bebe, false)}${sideHTML(cur, "mae", b.mae, false)}</div>`;
     } else if (before) {
       hero.style.setProperty("--c", "var(--c-navy)");
       hero.innerHTML = `
