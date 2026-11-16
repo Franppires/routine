@@ -128,6 +128,10 @@ dialog::backdrop { background: rgba(20,15,25,.55); backdrop-filter: blur(2px); }
 .slot.skipped::after { border-style: dashed; }
 .dias { font-size: .7rem; font-weight: 800; color: var(--c); background: var(--surface); padding: 3px 8px; border-radius: 99px; white-space: nowrap; }
 .desc.none { margin: 0; font-style: italic; }
+.hero.simple .btn.small { flex: none; }
+.chip-x { all: unset; cursor: pointer; margin-left: 4px; padding: 0 4px; color: var(--muted); font-size: .8rem; }
+.chip-x:hover { color: var(--text); }
+@media (max-width: 680px) { .hero.simple { flex-wrap: wrap; } }
 
 /* ---------- Lembretes ---------- */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
@@ -377,6 +381,8 @@ const NATACAO = [1, 3, 5];         // natação segunda, quarta e sexta
 const NOMES = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 /* Blocos pulados combinados de antemão (a pessoa pode desfazer na tela) */
 const PULOS_PADRAO = { "2026-11-16": ["natacao"] };
+/* Horário em que o bebê acordou, informado de antemão (a pessoa pode mudar/desfazer na tela) */
+const ACORDOU_PADRAO = { "2026-11-16": "06:24" };
 
 const ROTINA = [
   { id: "natacao", ini: "06:55", fim: "07:30", titulo: "Natação", cor: "blue", img: "person_swimming", dias: NATACAO, opcional: true,
@@ -414,7 +420,7 @@ const ROTINA = [
     mae:  { tit: "Preparar para a soneca", txt: "Ritual rápido de 10 minutos (música calma ou livro curto) para ele pegar no sono.",
             tasks: ["Ritual de 10 min (música/livro)"] } },
   { id: "soneca", ini: "12:30", fim: "14:30", titulo: "Soneca Única", cor: "pink", img: "zzz",
-    bebe: { txt: "Dormir no quarto escuro e silencioso. Acordar suavemente às 14h30 se passar do horário.",
+    bebe: { txt: "Dormir no quarto escuro e silencioso. Acordar suavemente no fim do horário se ele passar.",
             tasks: ["Soneca no quarto escuro"] },
     mae:  { tit: "Home Office · Bloco 2 (Foco Profundo)", txt: "Reuniões, desenvolvimento e tarefas que exigem silêncio e concentração máxima, sem interrupções.",
             tasks: ["Reuniões / trabalho focado"] } },
@@ -422,7 +428,7 @@ const ROTINA = [
     bebe: { txt: "Leite ou vitamina de fruta, biscoito de arroz ou pão de queijo caseiro + água.",
             tasks: ["Lanche da tarde + água"] },
     mae:  { tit: "Transição", txt: "Acordar o bebê com calma, trocar fralda e servir o lanche.",
-            tasks: ["Acordar com calma (até 14h30)", "Trocar fralda"] } },
+            tasks: ["Acordar com calma", "Trocar fralda"] } },
   { id: "sensorial", ini: "15:00", fim: "16:30", titulo: "Brincadeira Livre / Sensorial", cor: "pink", img: "artist_palette",
     bebe: { txt: "Livros cartonados, lousa mágica, massinha caseira ou brincar na cozinha com potes plásticos.",
             tasks: ["Brincadeira sensorial"] },
@@ -434,15 +440,15 @@ const ROTINA = [
     mae:  { tit: "Organização da casa", txt: "Recolher os brinquedos com a ajuda dele (virando brincadeira) e passar o robô na cozinha/sala se necessário. Terça e quinta: dobrar a roupa.",
             tasks: [{ t: "Dobrar a roupa", dias: LAVAR }, "Recolher brinquedos juntos", "Robô na cozinha/sala"] } },
   { id: "banho", ini: "17:30", fim: "18:30", titulo: "Banho e Jantar", cor: "purple", img: "bathtub",
-    bebe: { txt: "Banho relaxante por volta das 17h30 e jantar às 18h00 (mesma base do almoço ou sopa/panqueca nutritiva).",
-            tasks: ["Banho (17h30)", "Jantar (18h00)"] },
+    bebe: { txt: "Banho relaxante e, logo depois, o jantar (mesma base do almoço ou sopa/panqueca nutritiva).",
+            tasks: ["Banho", "Jantar"] },
     mae:  { tit: "Encerramento do dia", txt: "Dar o banho, servir o jantar, jantar em família e deixar a cozinha limpa (ou a louça encaminhada).",
             tasks: ["Jantar em família", "Cozinha limpa / louça encaminhada"] } },
   { id: "noite", ini: "18:30", fim: "19:30", titulo: "Ritual Noturno e Leite", cor: "navy", img: "crescent_moon",
     bebe: { txt: "Pijama, luz baixa, mamadeira/leite da noite, escovação e história curta no quarto.",
             tasks: ["Pijama e luz baixa", "Leite da noite", "Escovar os dentes", "História curta"] },
-    mae:  { tit: "Descanso", txt: "Colocar o bebê para dormir entre 19h30 e 20h00 e ter a noite livre.",
-            tasks: ["Bebê dormindo (19h30–20h)", { t: "Separar mochila da natação", dias: [0, 2, 4] }] } },
+    mae:  { tit: "Descanso", txt: "Colocar o bebê para dormir no fim do ritual e ter a noite livre.",
+            tasks: ["Bebê dormindo", { t: "Separar mochila da natação", dias: [0, 2, 4] }] } },
 ];
 /* ids da versão anterior (por posição) → ids estáveis, para não perder marcações */
 const OLD = ["acordar", "tapete", "lanche-manha", "passeio", "almoco", "higiene", "soneca", "lanche-tarde", "sensorial", "leitura", "banho", "noite"];
@@ -472,7 +478,7 @@ const dayKey = () => "rotina-" + ymd(new Date());
 const nowMin = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
 
 const toHM = m => `${pad(Math.floor(m / 60) % 24)}:${pad(m % 60)}`;
-let currentDay, checks, pulos, horarios, manual, heroKey, HOJE;
+let currentDay, checks, pulos, horarios, acordou, deltaDia = 0, manual, heroKey, HOJE;
 
 const tasksHoje = (tasks, dow) => tasks
   .map((t, j) => typeof t === "string" ? { t, j } : { t: t.t, j, dias: t.dias })
@@ -491,20 +497,25 @@ function loadDay() {
   pulos = store.get(currentDay + "-pulos", null) ||
           Object.fromEntries((PULOS_PADRAO[ymd(hoje)] || []).map(id => [id, true]));
   horarios = store.get(currentDay + "-horarios", {});
+  acordou = store.get(currentDay + "-acordou", ACORDOU_PADRAO[ymd(hoje)] || "");
   manual = {}; heroKey = null;
   buildHoje();
 }
 /* Monta os blocos de hoje: filtra pelo dia da semana e aplica reagendamentos */
 function buildHoje() {
   const dow = new Date().getDay();
+  const base = ROTINA.find(b => b.id === "acordar").ini;
+  deltaDia = acordou ? toMin(acordou) - toMin(base) : 0;
   HOJE = ROTINA.filter(b => !b.dias || b.dias.includes(dow)).map(b => {
-    const novo = horarios[b.id], dur = toMin(b.fim) - toMin(b.ini);
+    const dur = toMin(b.fim) - toMin(b.ini);
+    // reagendado manualmente > deslocado pelo horário que acordou > horário normal (natação não desloca)
+    const novo = horarios[b.id] || (deltaDia && b.id !== "natacao" ? toHM(toMin(b.ini) + deltaDia) : null);
     return {
       ...b,
       ini: novo || b.ini,
       fim: novo ? toHM(toMin(novo) + dur) : b.fim,
       orig: b.ini,
-      reag: !!novo,
+      reag: !!horarios[b.id],
       bebe: { ...b.bebe, list: tasksHoje(b.bebe.tasks, dow) },
       mae:  { ...b.mae,  list: tasksHoje(b.mae.tasks, dow) },
     };
@@ -533,6 +544,14 @@ const sideHTML = (b, who, withDesc) => {
   </div>`;
 };
 
+const wakeMsg = () => `Acordou às <b>${fmt(acordou)}</b> — dia ${deltaDia < 0 ? "adiantado" : "atrasado"} ${fmtDur(Math.abs(deltaDia))}`;
+const wakeBar = () => `<div class="skipbar">
+  <span class="resched-msg">${acordou ? wakeMsg() + "." : "Acordou em outro horário? O dia se ajusta sozinho."}</span>
+  <input type="time" class="resched" data-wake-input value="${acordou || "07:30"}" hidden aria-label="Horário em que acordou">
+  ${acordou ? `<button class="btn small ghost" type="button" data-wake-reset>Voltar ao horário normal</button>` : ""}
+  <button class="btn small" type="button" data-wake>⏰ ${acordou ? "Mudar horário" : "Acordou às…"}</button>
+</div>`;
+
 function renderBlocks() {
   $("#blocks").innerHTML = HOJE.map(b => `
     <section class="slot" id="b-${b.id}" style="--c: var(--c-${b.cor})">
@@ -553,6 +572,7 @@ function renderBlocks() {
         </button>
         <div class="card-body"><div class="inner">
           <div class="cols">${sideHTML(b, "bebe", true)}${sideHTML(b, "mae", true)}</div>
+          ${b.id === "acordar" ? wakeBar() : ""}
           ${b.opcional ? `<div class="skipbar">
             <span class="skip-msg">Pulado hoje — tudo bem descansar.</span>
             ${b.reag ? `<span class="resched-msg">Reagendado hoje para ${fmt(b.ini)}.</span>` : ""}
@@ -565,8 +585,8 @@ function renderBlocks() {
       </article>
     </section>`).join("") + `
     <section class="slot end" id="fim" style="--c: var(--c-navy)">
-      <div class="when"><span class="ini">19h30</span></div>
-      <div class="end-card">${img("night_with_stars")}Noite livre — bebê dormindo até as 20h. Bom descanso!</div>
+      <div class="when"><span class="ini">${fmt(HOJE[HOJE.length - 1].fim)}</span></div>
+      <div class="end-card">${img("night_with_stars")}Noite livre — bebê dormindo. Bom descanso!</div>
     </section>`;
 }
 
@@ -625,7 +645,9 @@ function renderHero(cur, m, list) {
         <div class="hero-tasks">${sideHTML(cur, "bebe", false)}${sideHTML(cur, "mae", false)}</div>`;
     } else if (before) {
       hero.style.setProperty("--c", `var(--c-${first.cor})`);
-      hero.innerHTML = `<span class="pulse"></span><span class="line">O dia começa às <b>${fmt(first.ini)}</b> com <b>${first.titulo}</b></span><span class="left" id="heroLeft"></span>`;
+      hero.innerHTML = `<span class="pulse"></span><span class="line">O dia começa às <b>${fmt(first.ini)}</b> com <b>${first.titulo}</b></span><span class="left" id="heroLeft"></span>
+        <input type="time" class="resched" data-wake-input value="${acordou || "07:30"}" hidden aria-label="Horário em que acordou">
+        <button class="btn small" type="button" data-wake>⏰ Acordou antes?</button>`;
     } else {
       hero.style.setProperty("--c", "var(--c-navy)");
       hero.innerHTML = `<span class="pulse"></span><span class="line"><b>Noite livre</b> · <span id="heroDone"></span></span>`;
@@ -648,6 +670,7 @@ function renderChips(now) {
   const rodizio = doy % 3 === 0;
   const nat = HOJE.find(b => b.id === "natacao");
   let html = "";
+  if (acordou) html += `<span class="chip">${img("alarm_clock")}${wakeMsg()}<button class="chip-x" type="button" data-wake-reset aria-label="Voltar ao horário normal">✕</button></span>`;
   if (nat && !isSkipped(nat)) html += `<span class="chip">${img("person_swimming")}Natação às ${fmt(nat.ini)}</span>`;
   if (LAVAR.includes(dow)) html += `<span class="chip">${img("basket")}Dia de lavar roupa</span>`;
   if (lote) html += `<span class="chip">${img("pot_of_food")}Dia de cozinha em lote</span>`;
@@ -702,7 +725,24 @@ function goTo(id) {
 }
 
 /* ---------- eventos ---------- */
+function setAcordou(v) {
+  acordou = v;
+  store.set(currentDay + "-acordou", v);
+  manual = {};
+  rebuild();
+}
+document.addEventListener("click", e => {
+  const w = e.target.closest("[data-wake]");
+  if (w) {
+    const inp = $("[data-wake-input]", w.parentElement);
+    inp.hidden = false; inp.focus();
+    try { inp.showPicker(); } catch {}
+    return;
+  }
+  if (e.target.closest("[data-wake-reset]")) setAcordou("");
+});
 document.addEventListener("change", e => {
+  if (e.target.matches("[data-wake-input]")) { if (e.target.value) setAcordou(e.target.value); return; }
   const rid = e.target.dataset && e.target.dataset.reschedInput;
   if (rid) {
     if (!e.target.value) return;
