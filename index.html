@@ -26,20 +26,21 @@
   --c-pink: #c25a74;
   --c-purple: #85568a;
   --c-navy: #3a4675;
+  --c-blue: #2f6fb3;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #18171c; --surface: #222128; --surface-2: #2c2b33; --text: #f1edf3;
     --muted: #a39dab; --line: #34323c; --accent: #4fb5ae; --done: #5cc285; --on-c: #18171c;
     --shadow: 0 1px 2px rgba(0,0,0,.35);
-    --c-teal: #4fb5ae; --c-orange: #e39a5f; --c-pink: #e07c95; --c-purple: #b98ebe; --c-navy: #8a9be0;
+    --c-teal: #4fb5ae; --c-orange: #e39a5f; --c-pink: #e07c95; --c-purple: #b98ebe; --c-navy: #8a9be0; --c-blue: #6fa8e6;
   }
 }
 :root[data-theme="dark"] {
   --bg: #18171c; --surface: #222128; --surface-2: #2c2b33; --text: #f1edf3;
   --muted: #a39dab; --line: #34323c; --accent: #4fb5ae; --done: #5cc285; --on-c: #18171c;
   --shadow: 0 1px 2px rgba(0,0,0,.35);
-  --c-teal: #4fb5ae; --c-orange: #e39a5f; --c-pink: #e07c95; --c-purple: #b98ebe; --c-navy: #8a9be0;
+  --c-teal: #4fb5ae; --c-orange: #e39a5f; --c-pink: #e07c95; --c-purple: #b98ebe; --c-navy: #8a9be0; --c-blue: #6fa8e6;
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -76,7 +77,7 @@ img { object-fit: contain; }
 .hero-top .left { margin-left: auto; text-transform: none; letter-spacing: 0; color: var(--text); background: var(--surface); padding: 3px 10px; border-radius: 99px; font-size: .8rem; white-space: nowrap; }
 .pulse { width: 9px; height: 9px; border-radius: 50%; background: var(--c); flex: none; animation: pulse 2s infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--c) 55%, transparent); } 70%, 100% { box-shadow: 0 0 0 9px transparent; } }
-.hero-main { display: flex; align-items: center; gap: 14px; margin: 10px 0 2px; }
+.hero-main { display: flex; align-items: center; gap: 14px; margin: 6px 0 0; }
 .hero-ill img { width: 58px; height: 58px; display: block; filter: drop-shadow(0 3px 4px rgba(0,0,0,.14)); }
 .hero-txt { flex: 1; min-width: 0; }
 .hero h2 { margin: 0; font-size: 1.5rem; letter-spacing: -.01em; line-height: 1.2; }
@@ -88,6 +89,45 @@ img { object-fit: contain; }
 .hero-next { all: unset; cursor: pointer; display: inline-block; margin-top: 12px; font-size: .88rem; color: var(--muted); }
 .hero-next b { color: var(--text); }
 .hero-next:hover b, .hero-next:focus-visible b { text-decoration: underline; }
+
+/* Card "Agora" simples (antes / depois da rotina) */
+.hero.simple { display: flex; align-items: center; gap: 10px; padding: 12px 18px; }
+.hero.simple .line { flex: 1; min-width: 0; color: var(--muted); }
+.hero.simple .line b { color: var(--text); }
+.hero.simple .left { text-transform: none; font-size: .8rem; font-weight: 800; background: var(--surface); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+
+/* ---------- Barra do topo ---------- */
+.appbar { background: var(--surface); border-bottom: 1px solid var(--line); }
+.appbar-in { max-width: 1300px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 800; }
+.brand img { width: 24px; height: 24px; }
+.brand span { color: var(--muted); font-weight: 700; }
+.actions { display: flex; gap: 2px; }
+.actions .btn { padding: 7px 10px; }
+#tipsBtn { position: relative; }
+#tipsBtn.has-dot::after { content: ""; position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+/* ---------- Janela de dicas ---------- */
+dialog { border: 1px solid var(--line); border-radius: 22px; padding: 20px; width: min(760px, calc(100% - 32px)); max-height: calc(100% - 48px); background: var(--bg); color: var(--text); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+dialog::backdrop { background: rgba(20,15,25,.55); backdrop-filter: blur(2px); }
+.dlg-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.dlg-head h2 { margin: 0; font-size: 1.15rem; }
+
+/* Pular / reagendar */
+.skipbar { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; padding: 10px 16px; border-top: 1px solid var(--line); }
+.skip-msg, .resched-msg { margin-right: auto; color: var(--muted); font-weight: 700; font-size: .88rem; }
+.skip-msg { display: none; }
+.slot.skipped .skip-msg { display: inline; }
+.slot.skipped .resched-msg { display: none; }
+.btn.small { padding: 5px 11px; font-size: .82rem; }
+.resched { font: inherit; font-weight: 700; font-size: .85rem; color: var(--text); background: var(--surface); border: 1px solid var(--c); border-radius: 10px; padding: 4px 8px; color-scheme: light dark; }
+.slot.skipped .cols { display: none; }
+.slot.skipped .card { opacity: .65; }
+.slot.skipped .title { text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--muted) 60%, transparent); }
+.slot.skipped .count { color: var(--muted); }
+.slot.skipped::after { border-style: dashed; }
+.dias { font-size: .7rem; font-weight: 800; color: var(--c); background: var(--surface); padding: 3px 8px; border-radius: 99px; white-space: nowrap; }
+.desc.none { margin: 0; font-style: italic; }
 
 /* ---------- Lembretes ---------- */
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
@@ -144,7 +184,7 @@ img { object-fit: contain; }
 .slot.collapsed .chev { transform: rotate(-90deg); }
 .card-body { display: grid; grid-template-rows: 1fr; transition: grid-template-rows .3s ease; }
 .slot.collapsed .card-body { grid-template-rows: 0fr; }
-.card-body > .cols { min-height: 0; overflow: hidden; }
+.card-body > .inner { min-height: 0; overflow: hidden; }
 .cols { display: grid; grid-template-columns: 1fr 1fr; }
 .side { padding: 14px 16px 14px; min-width: 0; }
 .cols .side + .side { border-left: 1px solid var(--line); }
@@ -198,15 +238,16 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
 
 /* ---------- Computador: coluna única, larga e arejada ---------- */
 @media (min-width: 1100px) {
-  .wrap { max-width: 1180px; padding: 40px 48px 56px; }
+  .wrap { max-width: 1300px; padding: 28px 48px 56px; }
+  .appbar-in { padding: 10px 48px; }
   .top { margin-bottom: 28px; }
   .top h1 { font-size: 1.9rem; }
   .ring { width: 88px; height: 88px; }
-  .hero { padding: 24px 28px; margin-bottom: 14px; }
+  .hero { padding: 16px 22px; margin-bottom: 14px; }
   .hero.has-tasks { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 0 32px; align-items: center; }
   .hero.has-tasks .hero-tasks { margin: 0; padding: 4px 0 4px 32px; border-top: 0; border-left: 1px dashed color-mix(in srgb, var(--c) 35%, transparent); gap: 10px 24px; }
   .hero h2 { font-size: 1.7rem; }
-  .hero-ill img { width: 64px; height: 64px; }
+  .hero-ill img { width: 52px; height: 52px; }
   .chips { margin-bottom: 8px; }
   .toolbar { padding: 14px 0; margin-bottom: 12px; }
   .slot { grid-template-columns: 84px 1fr; gap: 0 40px; padding-bottom: 20px; }
@@ -219,8 +260,6 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   .side { padding: 18px 22px 20px; }
   .desc { font-size: .92rem; }
   .task { font-size: 1rem; }
-  .tips { padding-left: 124px; }
-  .tips h2 { margin-top: 40px; }
   .tip-grid { gap: 12px; }
 }
 
@@ -228,7 +267,8 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   .wrap { padding-top: 18px; }
   .top h1 { font-size: 1.3rem; }
   .ring { width: 64px; height: 64px; }
-  .hero { padding: 16px; }
+  .hero { padding: 14px; }
+  .actions .btn span, .brand span { display: none; }
   .hero h2 { font-size: 1.25rem; }
   .hero-ill img { width: 46px; height: 46px; }
   .hero-tasks, .cols, .tip-grid { grid-template-columns: 1fr; }
@@ -250,7 +290,7 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   @page { size: A4 landscape; margin: 8mm; }
   :root { --bg: #fff; --surface: #fff; --shadow: none; }
   body { font-size: 10px; }
-  .hero, .chips, .toolbar, footer, .ring, .chev, .live { display: none !important; }
+  .appbar, .skipbar, .hero, .chips, .toolbar, footer, .ring, .chev, .live { display: none !important; }
   .layout { display: block; } .aside { display: contents; position: static; max-height: none; }
   .wrap { padding: 0; max-width: none; }
   .top { margin-bottom: 6px; }
@@ -272,6 +312,17 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
 </style>
 </head>
 <body>
+<header class="appbar">
+  <div class="appbar-in">
+    <div class="brand"><img src="img/alarm_clock.png" alt="">Rotina <span>Bebê &amp; Mãe</span></div>
+    <div class="actions">
+      <button class="btn ghost" id="tipsBtn" title="Dicas">💡<span>Dicas</span></button>
+      <button class="btn ghost" id="print" title="Imprimir">🖨️<span>Imprimir</span></button>
+      <button class="btn ghost" id="theme" title="Tema claro/escuro">🌓<span>Tema</span></button>
+      <button class="btn ghost" id="reset" title="Recomeçar o dia">↺<span>Recomeçar o dia</span></button>
+    </div>
+  </div>
+</header>
 <div class="wrap">
   <header class="top">
     <div>
@@ -290,9 +341,6 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   <section class="hero" id="now" aria-live="polite"></section>
   <div class="chips" id="chips"></div>
   <footer>
-    <button class="btn ghost" id="print">🖨️ Imprimir</button>
-    <button class="btn ghost" id="theme">🌓 Tema</button>
-    <button class="btn ghost" id="reset">↺ Recomeçar o dia</button>
     <p>As marcações ficam salvas neste aparelho e recomeçam a cada novo dia.</p>
   </footer>
   </aside>
@@ -310,84 +358,99 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   </nav>
 
   <main id="blocks"></main>
-  <section class="tips">
-    <h2>Dicas para o dia fluir sem sobrecarga</h2>
-    <div class="tip-grid" id="tips"></div>
-  </section>
   </div>
   </div>
 </div>
 
+<dialog id="tipsDlg" aria-labelledby="tipsTitle">
+  <div class="dlg-head">
+    <h2 id="tipsTitle">💡 Dicas para o dia fluir sem sobrecarga</h2>
+    <button class="btn ghost" id="tipsClose" aria-label="Fechar">✕</button>
+  </div>
+  <div class="tip-grid" id="tips"></div>
+</dialog>
+
 <script>
+/* Dias da semana: 0=dom 1=seg 2=ter 3=qua 4=qui 5=sex 6=sáb */
+const LAVAR = [2, 4];              // roupa só terça e quinta
+const NATACAO = [1, 3, 5];         // natação segunda, quarta e sexta
+const NOMES = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+/* Blocos pulados combinados de antemão (a pessoa pode desfazer na tela) */
+const PULOS_PADRAO = { "2026-11-16": ["natacao"] };
+
 const ROTINA = [
-  { ini: "07:30", fim: "08:15", titulo: "Acordar e Leite", cor: "teal",
+  { id: "natacao", ini: "06:55", fim: "07:30", titulo: "Natação", cor: "blue", img: "person_swimming", dias: NATACAO, opcional: true,
+    bebe: { txt: "Ainda dormindo ou com quem fica em casa com ele.", tasks: [] },
+    mae:  { tit: "Exercício", txt: "Natação às 6h55. Deixe a mochila pronta na noite anterior para sair sem correria.",
+            tasks: ["Natação"] } },
+  { id: "acordar", ini: "07:30", fim: "08:15", titulo: "Acordar e Leite", cor: "teal", img: "baby_bottle",
     bebe: { txt: "Higiene matinal, troca de fralda e mamadeira/copo de leite com café da manhã leve (fruta picada ou pãozinho).",
             tasks: ["Higiene e troca de fralda", "Leite + fruta ou pãozinho"] },
-    mae:  { tit: "Início do dia", txt: "Tomar café junto, abrir janelas para luz natural e colocar a primeira carga na lava e seca (ciclo rápido ou diário).",
-            tasks: ["Tomar café juntos", "Abrir janelas", "1ª carga na lava e seca"] } },
-  { ini: "08:15", fim: "09:30", titulo: "Brincadeiras no Tapete", cor: "teal",
+    mae:  { tit: "Início do dia", txt: "Tomar café junto e abrir as janelas para luz natural. Terça e quinta: colocar a roupa na lava e seca (ciclo rápido).",
+            tasks: ["Tomar café juntos", "Abrir janelas", { t: "Colocar roupa na lava e seca", dias: LAVAR }] } },
+  { id: "tapete", ini: "08:15", fim: "09:30", titulo: "Brincadeiras no Tapete", cor: "teal", img: "teddy_bear",
     bebe: { txt: "Autonomia: caixas de encaixe, blocos de montar, carrinhos ou panelinhas perto de você.",
             tasks: ["Brincar no tapete (4–5 brinquedos)"] },
     mae:  { tit: "Home Office · Bloco 1 (Foco Leve)", txt: "Responder mensagens, e-mails, checar tarefas e organizar as demandas do dia enquanto ele brinca ao lado.",
             tasks: ["Mensagens e e-mails", "Organizar demandas do dia"] } },
-  { ini: "09:30", fim: "10:00", titulo: "Lanche da Manhã", cor: "teal",
+  { id: "lanche-manha", ini: "09:30", fim: "10:00", titulo: "Lanche da Manhã", cor: "teal", img: "banana",
     bebe: { txt: "Fruta inteira ou amassada, bolinho caseiro sem açúcar ou iogurte natural + água.",
             tasks: ["Lanche + água"] },
-    mae:  { tit: "Pausa rápida", txt: "Preparar o lanche, tirar a roupa da lava e seca (ou iniciar a secagem) e dar uma olhada nos pré-preparos do almoço.",
-            tasks: ["Tirar roupa da lava e seca", "Conferir pré-preparo do almoço"] } },
-  { ini: "10:00", fim: "11:15", titulo: "Passeio ao Ar Livre", cor: "teal",
+    mae:  { tit: "Pausa rápida", txt: "Preparar o lanche e dar uma olhada nos pré-preparos do almoço. Terça e quinta: tirar a roupa da lava e seca.",
+            tasks: [{ t: "Tirar roupa da lava e seca", dias: LAVAR }, "Conferir pré-preparo do almoço"] } },
+  { id: "passeio", ini: "10:00", fim: "11:15", titulo: "Passeio ao Ar Livre", cor: "teal", img: "playground_slide",
     bebe: { txt: "Caminhada curta (passos de mãos dadas ou empurrando brinquedo), parquinho, brinquedoteca ou espaço kids.",
             tasks: ["Passeio / parquinho / espaço kids"] },
     mae:  { tit: "Conexão e gasto de energia", txt: "Foco total nele para gastar energia física e garantir pressão de sono. Ao sair, ligue o robô aspirador na sala e nos quartos.",
             tasks: ["Ligar robô aspirador ao sair", "Foco total no bebê"] } },
-  { ini: "11:15", fim: "12:15", titulo: "Almoço", cor: "orange",
+  { id: "almoco", ini: "11:15", fim: "12:15", titulo: "Almoço", cor: "orange", img: "bowl_with_spoon",
     bebe: { txt: "Comida da família (arroz, feijão, proteína desfiada/picada e legumes) na cadeira de alimentação.",
             tasks: ["Almoço na cadeirinha"] },
     mae:  { tit: "Finalizar e servir", txt: "Aquecer ou finalizar a comida (air fryer ou panela de pressão para agilizar) e almoçar junto com ele.",
             tasks: ["Finalizar o almoço", "Almoçar juntos"] } },
-  { ini: "12:15", fim: "12:30", titulo: "Higiene e Desacelerar", cor: "pink",
+  { id: "higiene", ini: "12:15", fim: "12:30", titulo: "Higiene e Desacelerar", cor: "pink", img: "toothbrush",
     bebe: { txt: "Troca de fralda, escovar os dentes e fechar as cortinas do quarto.",
             tasks: ["Trocar fralda", "Escovar os dentes", "Fechar cortinas"] },
     mae:  { tit: "Preparar para a soneca", txt: "Ritual rápido de 10 minutos (música calma ou livro curto) para ele pegar no sono.",
             tasks: ["Ritual de 10 min (música/livro)"] } },
-  { ini: "12:30", fim: "14:30", titulo: "Soneca Única", cor: "pink",
+  { id: "soneca", ini: "12:30", fim: "14:30", titulo: "Soneca Única", cor: "pink", img: "zzz",
     bebe: { txt: "Dormir no quarto escuro e silencioso. Acordar suavemente às 14h30 se passar do horário.",
             tasks: ["Soneca no quarto escuro"] },
     mae:  { tit: "Home Office · Bloco 2 (Foco Profundo)", txt: "Reuniões, desenvolvimento e tarefas que exigem silêncio e concentração máxima, sem interrupções.",
             tasks: ["Reuniões / trabalho focado"] } },
-  { ini: "14:30", fim: "15:00", titulo: "Acordar e Lanche da Tarde", cor: "orange",
+  { id: "lanche-tarde", ini: "14:30", fim: "15:00", titulo: "Acordar e Lanche da Tarde", cor: "orange", img: "glass_of_milk",
     bebe: { txt: "Leite ou vitamina de fruta, biscoito de arroz ou pão de queijo caseiro + água.",
             tasks: ["Lanche da tarde + água"] },
     mae:  { tit: "Transição", txt: "Acordar o bebê com calma, trocar fralda e servir o lanche.",
             tasks: ["Acordar com calma (até 14h30)", "Trocar fralda"] } },
-  { ini: "15:00", fim: "16:30", titulo: "Brincadeira Livre / Sensorial", cor: "pink",
+  { id: "sensorial", ini: "15:00", fim: "16:30", titulo: "Brincadeira Livre / Sensorial", cor: "pink", img: "artist_palette",
     bebe: { txt: "Livros cartonados, lousa mágica, massinha caseira ou brincar na cozinha com potes plásticos.",
             tasks: ["Brincadeira sensorial"] },
     mae:  { tit: "Home Office · Bloco 3 + Cozinha", txt: "Finalizar pendências no notebook enquanto ele explora os brinquedos, e adiantar o jantar (cortar legumes ou temperar a carne).",
             tasks: ["Fechar pendências do trabalho", "Adiantar o jantar"] } },
-  { ini: "16:30", fim: "17:30", titulo: "Leitura e Tapete", cor: "pink",
+  { id: "leitura", ini: "16:30", fim: "17:30", titulo: "Leitura e Tapete", cor: "pink", img: "open_book",
     bebe: { txt: "Leitura interativa (apontando figuras e nomeando objetos) e brincadeiras mais calmas no tapete.",
             tasks: ["Leitura interativa"] },
-    mae:  { tit: "Organização da casa", txt: "Dobrar a roupa, recolher os brinquedos com a ajuda dele (virando brincadeira) e passar o robô na cozinha/sala se necessário.",
-            tasks: ["Dobrar a roupa", "Recolher brinquedos juntos", "Robô na cozinha/sala"] } },
-  { ini: "17:30", fim: "18:30", titulo: "Banho e Jantar", cor: "purple",
+    mae:  { tit: "Organização da casa", txt: "Recolher os brinquedos com a ajuda dele (virando brincadeira) e passar o robô na cozinha/sala se necessário. Terça e quinta: dobrar a roupa.",
+            tasks: [{ t: "Dobrar a roupa", dias: LAVAR }, "Recolher brinquedos juntos", "Robô na cozinha/sala"] } },
+  { id: "banho", ini: "17:30", fim: "18:30", titulo: "Banho e Jantar", cor: "purple", img: "bathtub",
     bebe: { txt: "Banho relaxante por volta das 17h30 e jantar às 18h00 (mesma base do almoço ou sopa/panqueca nutritiva).",
             tasks: ["Banho (17h30)", "Jantar (18h00)"] },
     mae:  { tit: "Encerramento do dia", txt: "Dar o banho, servir o jantar, jantar em família e deixar a cozinha limpa (ou a louça encaminhada).",
             tasks: ["Jantar em família", "Cozinha limpa / louça encaminhada"] } },
-  { ini: "18:30", fim: "19:30", titulo: "Ritual Noturno e Leite", cor: "navy",
+  { id: "noite", ini: "18:30", fim: "19:30", titulo: "Ritual Noturno e Leite", cor: "navy", img: "crescent_moon",
     bebe: { txt: "Pijama, luz baixa, mamadeira/leite da noite, escovação e história curta no quarto.",
             tasks: ["Pijama e luz baixa", "Leite da noite", "Escovar os dentes", "História curta"] },
     mae:  { tit: "Descanso", txt: "Colocar o bebê para dormir entre 19h30 e 20h00 e ter a noite livre.",
-            tasks: ["Bebê dormindo (19h30–20h)"] } },
+            tasks: ["Bebê dormindo (19h30–20h)", { t: "Separar mochila da natação", dias: [0, 2, 4] }] } },
 ];
-/* Ilustração de cada bloco (Fluent Emoji 3D, MIT) */
-const ILUSTRA = ["baby_bottle", "teddy_bear", "banana", "playground_slide", "bowl_with_spoon", "toothbrush",
-                 "zzz", "glass_of_milk", "artist_palette", "open_book", "bathtub", "crescent_moon"];
+/* ids da versão anterior (por posição) → ids estáveis, para não perder marcações */
+const OLD = ["acordar", "tapete", "lanche-manha", "passeio", "almoco", "higiene", "soneca", "lanche-tarde", "sensorial", "leitura", "banho", "noite"];
+
 const DICAS = [
   { id: "lote", img: "pot_of_food", t: "Cozinha em lote", d: "Escolha dois dias (ex.: domingo e quarta) para cozinhar e congelar porções de feijão, carnes desfiadas e legumes picados. No dia a dia é só montar o prato ou finalizar na air fryer em 15 minutos." },
   { id: "rodizio", img: "teddy_bear", t: "Rodízio de brinquedos", d: "Deixe só 4 ou 5 brinquedos no tapete e guarde o resto. Trocar a cada 3 dias renova o interesse dele e rende 30 a 40 minutos extras de concentração para você." },
-  { id: "auto", img: "robot", t: "Automação nas saídas", d: "Sempre que sair às 10h00, deixe a lava e seca batendo e o robô aspirador limpando a casa, com o chão livre de brinquedos." },
+  { id: "auto", img: "robot", t: "Automação nas saídas", d: "Sempre que sair às 10h00, deixe o robô aspirador limpando a casa, com o chão livre de brinquedos — e, às terças e quintas, a lava e seca batendo." },
   { id: "soneca", img: "stopwatch", t: "Teto rigoroso na soneca", d: "Para zerar os despertares de madrugada, não deixe a soneca passar das 14h30–15h00. Se dormir demais à tarde, ele perde o sono à noite." },
 ];
 
@@ -398,49 +461,107 @@ const toMin = hm => { const [h, m] = hm.split(":").map(Number); return h * 60 + 
 const fmt = hm => hm.replace(":", "h");
 const fmtDur = d => d >= 60 ? `${Math.floor(d / 60)}h${d % 60 ? String(d % 60).padStart(2, "0") : ""}` : `${d} min`;
 const img = (n, alt = "") => `<img src="img/${n}.png" alt="${alt}">`;
+const pad = n => String(n).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
   del(k) { try { localStorage.removeItem(k); } catch {} },
 };
-const dayKey = () => { const d = new Date(); return `rotina-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; };
-let currentDay = dayKey();
-let checks = store.get(currentDay, {});
-let manual = {};       // blocos que a pessoa abriu/fechou manualmente
-let heroKey = null;
+const dayKey = () => "rotina-" + ymd(new Date());
 const nowMin = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
-const blockIds = i => [
-  ...ROTINA[i].bebe.tasks.map((_, j) => `${i}-bebe-${j}`),
-  ...ROTINA[i].mae.tasks.map((_, j) => `${i}-mae-${j}`),
+
+const toHM = m => `${pad(Math.floor(m / 60) % 24)}:${pad(m % 60)}`;
+let currentDay, checks, pulos, horarios, manual, heroKey, HOJE;
+
+const tasksHoje = (tasks, dow) => tasks
+  .map((t, j) => typeof t === "string" ? { t, j } : { t: t.t, j, dias: t.dias })
+  .filter(x => !x.dias || x.dias.includes(dow));
+
+function loadDay() {
+  const hoje = new Date(), dow = hoje.getDay();
+  currentDay = dayKey();
+  checks = store.get(currentDay, {});
+  let migrou = false;
+  for (const k of Object.keys(checks)) {
+    const m = k.match(/^(\d+)-(bebe|mae)-(\d+)$/);
+    if (m && OLD[m[1]]) { checks[`${OLD[m[1]]}-${m[2]}-${m[3]}`] = checks[k]; delete checks[k]; migrou = true; }
+  }
+  if (migrou) store.set(currentDay, checks);
+  pulos = store.get(currentDay + "-pulos", null) ||
+          Object.fromEntries((PULOS_PADRAO[ymd(hoje)] || []).map(id => [id, true]));
+  horarios = store.get(currentDay + "-horarios", {});
+  manual = {}; heroKey = null;
+  buildHoje();
+}
+/* Monta os blocos de hoje: filtra pelo dia da semana e aplica reagendamentos */
+function buildHoje() {
+  const dow = new Date().getDay();
+  HOJE = ROTINA.filter(b => !b.dias || b.dias.includes(dow)).map(b => {
+    const novo = horarios[b.id], dur = toMin(b.fim) - toMin(b.ini);
+    return {
+      ...b,
+      ini: novo || b.ini,
+      fim: novo ? toHM(toMin(novo) + dur) : b.fim,
+      orig: b.ini,
+      reag: !!novo,
+      bebe: { ...b.bebe, list: tasksHoje(b.bebe.tasks, dow) },
+      mae:  { ...b.mae,  list: tasksHoje(b.mae.tasks, dow) },
+    };
+  }).sort((a, b) => toMin(a.ini) - toMin(b.ini));
+}
+function rebuild() { buildHoje(); renderBlocks(); heroKey = null; update(); }
+const isSkipped = b => !!pulos[b.id];
+const ativos = () => HOJE.filter(b => !isSkipped(b));
+const slotOf = b => $("#b-" + b.id);
+const blockIds = b => isSkipped(b) ? [] : [
+  ...b.bebe.list.map(x => `${b.id}-bebe-${x.j}`),
+  ...b.mae.list.map(x => `${b.id}-mae-${x.j}`),
 ];
 
 /* ---------- peças de HTML ---------- */
 const taskHTML = (id, t) =>
   `<li><label class="task"><input type="checkbox" data-id="${id}" ${checks[id] ? "checked" : ""}><span class="box" aria-hidden="true"></span><span class="txt">${t}</span></label></li>`;
-const sideHTML = (i, who, s, withDesc) => `
+const sideHTML = (b, who, withDesc) => {
+  const s = b[who];
+  return `
   <div class="side ${who}">
     <div class="side-h">${img(who === "bebe" ? "baby" : "woman")}${who === "bebe" ? "Bebê" : "Mãe"}${s.tit ? `<span>· ${s.tit}</span>` : ""}</div>
     ${withDesc ? `<p class="desc">${s.txt}</p>` : ""}
-    <ul class="tasks">${s.tasks.map((t, j) => taskHTML(`${i}-${who}-${j}`, t)).join("")}</ul>
+    ${s.list.length ? `<ul class="tasks">${s.list.map(x => taskHTML(`${b.id}-${who}-${x.j}`, x.t)).join("")}</ul>`
+                    : (withDesc ? "" : `<p class="desc none">${s.txt}</p>`)}
   </div>`;
+};
 
 function renderBlocks() {
-  $("#blocks").innerHTML = ROTINA.map((b, i) => `
-    <section class="slot" id="b${i}" style="--c: var(--c-${b.cor})">
+  $("#blocks").innerHTML = HOJE.map(b => `
+    <section class="slot" id="b-${b.id}" style="--c: var(--c-${b.cor})">
       <div class="when">
         <span class="ini">${fmt(b.ini)}</span>
         <span class="fim">até ${fmt(b.fim)}</span>
-        <span class="tile" aria-hidden="true">${img(ILUSTRA[i])}</span>
+        <span class="tile" aria-hidden="true">${img(b.img)}</span>
       </div>
       <article class="card">
-        <button class="card-head" type="button" aria-expanded="true" data-i="${i}">
+        <button class="card-head" type="button" aria-expanded="true" data-b="${b.id}">
           <span class="title">${b.titulo}</span>
+          ${b.dias ? `<span class="dias">${b.dias.map(d => NOMES[d]).join(" · ")}</span>` : ""}
+          ${b.reag ? `<span class="dias">Reagendado</span>` : ""}
           <span class="live">Agora</span>
           <span class="meta">${fmtDur(toMin(b.fim) - toMin(b.ini))}</span>
           <span class="count"></span>
           <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
         </button>
-        <div class="card-body"><div class="cols">${sideHTML(i, "bebe", b.bebe, true)}${sideHTML(i, "mae", b.mae, true)}</div></div>
+        <div class="card-body"><div class="inner">
+          <div class="cols">${sideHTML(b, "bebe", true)}${sideHTML(b, "mae", true)}</div>
+          ${b.opcional ? `<div class="skipbar">
+            <span class="skip-msg">Pulado hoje — tudo bem descansar.</span>
+            ${b.reag ? `<span class="resched-msg">Reagendado hoje para ${fmt(b.ini)}.</span>` : ""}
+            <input type="time" class="resched" data-resched-input="${b.id}" value="${b.ini}" hidden aria-label="Novo horário">
+            ${b.reag ? `<button class="btn small ghost" type="button" data-reset="${b.id}">Voltar para ${fmt(b.orig)}</button>` : ""}
+            <button class="btn small" type="button" data-resched="${b.id}">🕐 Reagendar</button>
+            <button class="btn small" type="button" data-skip="${b.id}"></button>
+          </div>` : ""}
+        </div></div>
       </article>
     </section>`).join("") + `
     <section class="slot end" id="fim" style="--c: var(--c-navy)">
@@ -454,8 +575,8 @@ function renderTips() {
     `<div class="tip" data-id="${d.id}">${img(d.img)}<div><b>${d.t}<span class="tag" hidden>hoje</span></b>${d.d}</div></div>`).join("");
 }
 
-function setCollapsed(i, c) {
-  const s = $("#b" + i);
+function setCollapsed(b, c) {
+  const s = slotOf(b);
   s.classList.toggle("collapsed", c);
   $(".card-head", s).setAttribute("aria-expanded", String(!c));
 }
@@ -466,58 +587,52 @@ function syncExpandLabel() {
 /* ---------- progresso ---------- */
 function counts() {
   let tot = 0, dn = 0;
-  ROTINA.forEach((_, i) => {
-    const ids = blockIds(i), d = ids.filter(id => checks[id]).length, s = $("#b" + i);
+  HOJE.forEach(b => {
+    const ids = blockIds(b), d = ids.filter(id => checks[id]).length, s = slotOf(b), sk = isSkipped(b);
     tot += ids.length; dn += d;
-    s.classList.toggle("done", d === ids.length);
-    $(".count", s).textContent = d === ids.length ? "✓ Feito" : `${d}/${ids.length}`;
+    s.classList.toggle("done", !sk && ids.length > 0 && d === ids.length);
+    $(".count", s).textContent = sk ? "Pulado hoje" : d === ids.length ? "✓ Feito" : `${d}/${ids.length}`;
   });
   $("#ringNum").textContent = dn;
   $("#ringTot").textContent = `de ${tot}`;
-  $("#ringVal").style.strokeDashoffset = 169.65 * (1 - dn / tot);
+  $("#ringVal").style.strokeDashoffset = 169.65 * (1 - (tot ? dn / tot : 0));
   const msg = $("#heroDone");
-  if (msg) msg.textContent = dn === tot ? "Todas as tarefas de hoje concluídas. 🎉" : `Você concluiu ${dn} de ${tot} tarefas hoje.`;
+  if (msg) msg.textContent = dn === tot ? "todas as tarefas de hoje concluídas 🎉" : `você concluiu ${dn} de ${tot} tarefas hoje`;
 }
 
 /* ---------- card "Agora" ---------- */
-function renderHero(cur, m) {
-  const hero = $("#now"), first = ROTINA[0];
+function renderHero(cur, m, list) {
+  const hero = $("#now"), first = list[0];
   const before = m < toMin(first.ini);
-  const key = cur >= 0 ? cur : before ? "antes" : "depois";
+  const key = cur ? cur.id : before ? "antes" : "depois";
   if (key !== heroKey) {
     heroKey = key;
-    hero.classList.toggle("has-tasks", cur >= 0);
-    if (cur >= 0) {
-      const b = ROTINA[cur], prox = ROTINA[cur + 1];
-      hero.style.setProperty("--c", `var(--c-${b.cor})`);
+    hero.classList.toggle("has-tasks", !!cur);
+    hero.classList.toggle("simple", !cur);
+    if (cur) {
+      const prox = list[list.indexOf(cur) + 1];
+      hero.style.setProperty("--c", `var(--c-${cur.cor})`);
       hero.innerHTML = `
         <div class="hero-info">
-        <div class="hero-top"><span class="pulse"></span>Agora · ${fmt(b.ini)} – ${fmt(b.fim)}<span class="left" id="heroLeft"></span></div>
-        <div class="hero-main">
-          <div class="hero-ill">${img(ILUSTRA[cur])}</div>
-          <div class="hero-txt"><h2>${b.titulo}</h2><div class="bar"><i id="heroBar"></i></div></div>
+          <div class="hero-top"><span class="pulse"></span>Agora · ${fmt(cur.ini)} – ${fmt(cur.fim)}<span class="left" id="heroLeft"></span></div>
+          <div class="hero-main">
+            <div class="hero-ill">${img(cur.img)}</div>
+            <div class="hero-txt"><h2>${cur.titulo}</h2><div class="bar"><i id="heroBar"></i></div></div>
+          </div>
+          ${prox ? `<button class="hero-next" data-go="${prox.id}">A seguir: <b>${fmt(prox.ini)} · ${prox.titulo}</b> →</button>`
+                 : `<div class="hero-next">A seguir: <b>noite livre</b> 🌙</div>`}
         </div>
-        ${prox ? `<button class="hero-next" data-go="${cur + 1}">A seguir: <b>${fmt(prox.ini)} · ${prox.titulo}</b> →</button>`
-               : `<div class="hero-next">A seguir: <b>noite livre</b> 🌙</div>`}
-        </div>
-        <div class="hero-tasks">${sideHTML(cur, "bebe", b.bebe, false)}${sideHTML(cur, "mae", b.mae, false)}</div>`;
+        <div class="hero-tasks">${sideHTML(cur, "bebe", false)}${sideHTML(cur, "mae", false)}</div>`;
     } else if (before) {
-      hero.style.setProperty("--c", "var(--c-navy)");
-      hero.innerHTML = `
-        <div class="hero-top"><span class="pulse"></span>Antes da rotina<span class="left" id="heroLeft"></span></div>
-        <div class="hero-main"><div class="hero-ill">${img("person_in_bed")}</div>
-          <div class="hero-txt"><h2>Ainda dá para descansar</h2><p class="msg">O dia começa às ${fmt(first.ini)} com <b>${first.titulo}</b>.</p></div></div>
-        <button class="hero-next" data-go="0">Ver o primeiro bloco →</button>`;
+      hero.style.setProperty("--c", `var(--c-${first.cor})`);
+      hero.innerHTML = `<span class="pulse"></span><span class="line">O dia começa às <b>${fmt(first.ini)}</b> com <b>${first.titulo}</b></span><span class="left" id="heroLeft"></span>`;
     } else {
       hero.style.setProperty("--c", "var(--c-navy)");
-      hero.innerHTML = `
-        <div class="hero-top"><span class="pulse"></span>Fim do dia</div>
-        <div class="hero-main"><div class="hero-ill">${img("night_with_stars")}</div>
-          <div class="hero-txt"><h2>Noite livre</h2><p class="msg" id="heroDone"></p></div></div>`;
+      hero.innerHTML = `<span class="pulse"></span><span class="line"><b>Noite livre</b> · <span id="heroDone"></span></span>`;
     }
   }
-  if (cur >= 0) {
-    const b = ROTINA[cur], ini = toMin(b.ini), fim = toMin(b.fim);
+  if (cur) {
+    const ini = toMin(cur.ini), fim = toMin(cur.fim);
     $("#heroLeft").textContent = `faltam ${fmtDur(fim - m)}`;
     $("#heroBar").style.width = `${Math.round((m - ini) / (fim - ini) * 100)}%`;
   } else if (before) {
@@ -531,52 +646,72 @@ function renderChips(now) {
   const lote = dow === 0 || dow === 3;
   const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
   const rodizio = doy % 3 === 0;
+  const nat = HOJE.find(b => b.id === "natacao");
   let html = "";
-  if (lote) html += `<span class="chip">${img("pot_of_food")}Hoje é dia de cozinha em lote</span>`;
+  if (nat && !isSkipped(nat)) html += `<span class="chip">${img("person_swimming")}Natação às ${fmt(nat.ini)}</span>`;
+  if (LAVAR.includes(dow)) html += `<span class="chip">${img("basket")}Dia de lavar roupa</span>`;
+  if (lote) html += `<span class="chip">${img("pot_of_food")}Dia de cozinha em lote</span>`;
   if (rodizio) html += `<span class="chip">${img("teddy_bear")}Dia de trocar os brinquedos</span>`;
   $("#chips").innerHTML = html;
+  let algumaHoje = false;
   $$(".tip").forEach(t => {
     const hot = (t.dataset.id === "lote" && lote) || (t.dataset.id === "rodizio" && rodizio);
+    algumaHoje ||= hot;
     t.classList.toggle("hot", hot);
     $(".tag", t).hidden = !hot;
   });
+  $("#tipsBtn").classList.toggle("has-dot", algumaHoje);
 }
 
 /* ---------- ciclo principal ---------- */
 function update() {
-  if (dayKey() !== currentDay) {
-    currentDay = dayKey(); checks = store.get(currentDay, {}); manual = {}; heroKey = null; renderBlocks();
-  }
+  if (dayKey() !== currentDay) { loadDay(); renderBlocks(); }
   const now = new Date(), m = nowMin(), h = now.getHours();
   const [sauda, icone] = h < 12 ? ["Bom dia", "sun"] : h < 18 ? ["Boa tarde", "sun_behind_cloud"] : ["Boa noite", "crescent_moon"];
   $("#greet").innerHTML = `${img(icone)}${sauda}`;
   const data = now.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
   $("#today").textContent = data.charAt(0).toUpperCase() + data.slice(1);
 
-  const cur = ROTINA.findIndex(b => m >= toMin(b.ini) && m < toMin(b.fim));
-  const before = m < toMin(ROTINA[0].ini);
-  ROTINA.forEach((b, i) => {
-    const s = $("#b" + i);
-    s.classList.toggle("current", i === cur);
+  const list = ativos();
+  const cur = list.find(b => m >= toMin(b.ini) && m < toMin(b.fim)) || null;
+  const ci = cur ? list.indexOf(cur) : -1;
+  const before = m < toMin(list[0].ini);
+  HOJE.forEach(b => {
+    const s = slotOf(b), sk = isSkipped(b), li = list.indexOf(b);
+    s.classList.toggle("current", b === cur);
     s.classList.toggle("past", m >= toMin(b.fim));
-    if (!(i in manual)) {
-      const open = cur >= 0 ? (i === cur || i === cur + 1) : before ? i <= 1 : false;
-      setCollapsed(i, !open);
+    s.classList.toggle("skipped", sk);
+    const btn = $("[data-skip]", s);
+    if (btn) btn.textContent = sk ? "Desfazer — vou hoje" : "Pular hoje";
+    if (!(b.id in manual)) {
+      const open = sk ? false : cur ? (li === ci || li === ci + 1) : before ? li <= 1 : false;
+      setCollapsed(b, !open);
     }
   });
-  renderHero(cur, m);
+  renderHero(cur, m, list);
   renderChips(now);
   counts();
   syncExpandLabel();
 }
 
-function goTo(i) {
-  manual[i] = false; setCollapsed(i, false); syncExpandLabel();
-  $("#b" + i).scrollIntoView({ behavior: "smooth", block: "start" });
+function goTo(id) {
+  const b = HOJE.find(x => x.id === id);
+  if (!b) return;
+  manual[id] = false; setCollapsed(b, false); syncExpandLabel();
+  slotOf(b).scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 /* ---------- eventos ---------- */
 document.addEventListener("change", e => {
+  const rid = e.target.dataset && e.target.dataset.reschedInput;
+  if (rid) {
+    if (!e.target.value) return;
+    horarios[rid] = e.target.value; pulos[rid] = false;
+    store.set(currentDay + "-horarios", horarios); store.set(currentDay + "-pulos", pulos);
+    delete manual[rid];
+    rebuild();
+    return;
+  }
   const id = e.target.dataset && e.target.dataset.id;
   if (!id) return;
   checks[id] = e.target.checked;
@@ -585,14 +720,37 @@ document.addEventListener("change", e => {
   counts();
 });
 $("#blocks").addEventListener("click", e => {
+  const rs = e.target.closest("[data-resched]");
+  if (rs) {
+    const inp = $(`[data-resched-input="${rs.dataset.resched}"]`);
+    inp.hidden = false; inp.focus();
+    try { inp.showPicker(); } catch {}
+    return;
+  }
+  const rr = e.target.closest("[data-reset]");
+  if (rr) {
+    delete horarios[rr.dataset.reset];
+    store.set(currentDay + "-horarios", horarios);
+    rebuild();
+    return;
+  }
+  const skip = e.target.closest("[data-skip]");
+  if (skip) {
+    const id = skip.dataset.skip;
+    pulos[id] = !pulos[id];
+    store.set(currentDay + "-pulos", pulos);
+    delete manual[id]; heroKey = null;
+    update();
+    return;
+  }
   const head = e.target.closest(".card-head");
   if (!head) return;
-  const i = +head.dataset.i, c = !$("#b" + i).classList.contains("collapsed");
-  manual[i] = c; setCollapsed(i, c); syncExpandLabel();
+  const b = HOJE.find(x => x.id === head.dataset.b), c = !slotOf(b).classList.contains("collapsed");
+  manual[b.id] = c; setCollapsed(b, c); syncExpandLabel();
 });
 $("#now").addEventListener("click", e => {
   const go = e.target.closest("[data-go]");
-  if (go) goTo(+go.dataset.go);
+  if (go) goTo(go.dataset.go);
 });
 $$(".seg button").forEach(btn => btn.addEventListener("click", () => {
   $$(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
@@ -602,13 +760,14 @@ $$(".seg button").forEach(btn => btn.addEventListener("click", () => {
 }));
 $("#expand").addEventListener("click", () => {
   const abrir = !!$(".slot.collapsed");
-  ROTINA.forEach((_, i) => { manual[i] = !abrir; setCollapsed(i, !abrir); });
+  HOJE.forEach(b => { manual[b.id] = !abrir; setCollapsed(b, !abrir); });
   syncExpandLabel();
 });
 $("#goNow").addEventListener("click", () => {
-  const cur = ROTINA.findIndex(b => nowMin() >= toMin(b.ini) && nowMin() < toMin(b.fim));
-  if (cur >= 0) goTo(cur);
-  else if (nowMin() < toMin(ROTINA[0].ini)) goTo(0);
+  const list = ativos(), m = nowMin();
+  const cur = list.find(b => m >= toMin(b.ini) && m < toMin(b.fim));
+  if (cur) goTo(cur.id);
+  else if (m < toMin(list[0].ini)) goTo(list[0].id);
   else $("#fim").scrollIntoView({ behavior: "smooth", block: "center" });
 });
 $("#print").addEventListener("click", () => window.print());
@@ -624,11 +783,16 @@ $("#theme").addEventListener("click", () => {
   root.dataset.theme = dark ? "light" : "dark";
   store.set("rotina-tema", root.dataset.theme);
 });
+const dlg = $("#tipsDlg");
+$("#tipsBtn").addEventListener("click", () => dlg.showModal());
+$("#tipsClose").addEventListener("click", () => dlg.close());
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
 
 /* ---------- início ---------- */
 (function init() {
   const tema = store.get("rotina-tema", null);
   if (tema) document.documentElement.dataset.theme = tema;
+  loadDay();
   renderTips();
   renderBlocks();
   const f = store.get("rotina-filtro", "tudo");
