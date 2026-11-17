@@ -113,6 +113,30 @@ dialog::backdrop { background: rgba(20,15,25,.55); backdrop-filter: blur(2px); }
 .dlg-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .dlg-head h2 { margin: 0; font-size: 1.15rem; }
 
+/* ---------- Diário ---------- */
+.badge { font-style: normal; font-size: .68rem; font-weight: 800; background: var(--accent); color: var(--on-c); border-radius: 99px; padding: 1px 6px; margin-left: 4px; }
+dialog.diario { width: min(640px, calc(100% - 32px)); }
+.daynav { display: flex; align-items: center; gap: 2px; font-weight: 800; font-size: .9rem; margin-left: auto; }
+.daynav .btn:disabled { opacity: .3; cursor: default; }
+.quick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.entry-form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 12px; border: 1px solid var(--accent); border-radius: 14px; background: var(--surface); margin-bottom: 12px; }
+.entry-form[hidden] { display: none; }
+.entry-form input[type="text"] { flex: 1; min-width: 160px; }
+.entry-form input[type="text"], .entry-form input[type="time"] { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; color-scheme: light dark; }
+.ef-type { font-weight: 800; }
+.ef-adj { display: flex; align-items: center; gap: 6px; width: 100%; font-size: .85rem; color: var(--muted); font-weight: 700; }
+.ef-adj[hidden] { display: none; }
+.log { list-style: none; margin: 0 0 16px; padding: 0; display: grid; gap: 3px; }
+.log li { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 10px; background: var(--surface); font-size: .94rem; }
+.log .lh { font-weight: 800; font-variant-numeric: tabular-nums; min-width: 46px; color: var(--accent); }
+.log .lt { flex: 1; min-width: 0; }
+.log .empty { color: var(--muted); justify-content: center; font-size: .88rem; }
+.notes-l { display: block; font-weight: 800; font-size: .85rem; margin-bottom: 6px; }
+#notes { width: 100%; font: inherit; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; resize: vertical; }
+.dlg-foot { margin: 8px 0 0; color: var(--muted); font-size: .78rem; }
+button.chip { font: inherit; font-size: .84rem; font-weight: 700; color: var(--text); cursor: pointer; padding: 4px 12px; }
+button.chip:hover { background: var(--surface-2); }
+
 /* Pular / reagendar */
 .skipbar { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; padding: 10px 16px; border-top: 1px solid var(--line); }
 .skip-msg, .resched-msg { margin-right: auto; color: var(--muted); font-weight: 700; font-size: .88rem; }
@@ -320,6 +344,7 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   <div class="appbar-in">
     <div class="brand"><img src="img/alarm_clock.png" alt="">Rotina <span>Bebê &amp; Mãe</span></div>
     <div class="actions">
+      <button class="btn ghost" id="diarioBtn" title="Diário do dia">📒<span>Diário</span><em class="badge" id="diarioCount" hidden></em></button>
       <button class="btn ghost" id="tipsBtn" title="Dicas">💡<span>Dicas</span></button>
       <button class="btn ghost" id="print" title="Imprimir">🖨️<span>Imprimir</span></button>
       <button class="btn ghost" id="theme" title="Tema claro/escuro">🌓<span>Tema</span></button>
@@ -366,6 +391,31 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   </div>
 </div>
 
+<dialog id="diarioDlg" class="diario" aria-labelledby="diarioTitle">
+  <div class="dlg-head">
+    <h2 id="diarioTitle">📒 Diário</h2>
+    <div class="daynav">
+      <button class="btn ghost small" type="button" id="dPrev" aria-label="Dia anterior">‹</button>
+      <span id="dDia"></span>
+      <button class="btn ghost small" type="button" id="dNext" aria-label="Próximo dia">›</button>
+    </div>
+    <button class="btn ghost" type="button" id="diarioClose" aria-label="Fechar">✕</button>
+  </div>
+  <div class="quick" id="quick"></div>
+  <form class="entry-form" id="entryForm" hidden>
+    <span class="ef-type" id="efType"></span>
+    <input type="time" id="efTime" required aria-label="Horário">
+    <input type="text" id="efText" aria-label="Detalhes">
+    <label class="ef-adj" id="efAdjWrap" hidden><input type="checkbox" id="efAdj" checked> ajustar a rotina para este horário</label>
+    <button class="btn small" type="submit">Salvar</button>
+    <button class="btn small ghost" type="button" id="efCancel">Cancelar</button>
+  </form>
+  <ol class="log" id="log"></ol>
+  <label class="notes-l" for="notes">Anotações do dia</label>
+  <textarea id="notes" rows="4" placeholder="Algo diferente hoje? Escreva ou cole aqui."></textarea>
+  <p class="dlg-foot">Fica salvo só neste aparelho.</p>
+</dialog>
+
 <dialog id="tipsDlg" aria-labelledby="tipsTitle">
   <div class="dlg-head">
     <h2 id="tipsTitle">💡 Dicas para o dia fluir sem sobrecarga</h2>
@@ -382,7 +432,7 @@ const NOMES = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 /* Blocos pulados combinados de antemão (a pessoa pode desfazer na tela) */
 const PULOS_PADRAO = { "2026-11-16": ["natacao"] };
 /* Horário em que o bebê acordou, informado de antemão (a pessoa pode mudar/desfazer na tela) */
-const ACORDOU_PADRAO = { "2026-11-16": "06:24" };
+const ACORDOU_PADRAO = { "2026-11-16": "06:24", "2026-11-17": "06:00" };
 
 const ROTINA = [
   { id: "natacao", ini: "06:55", fim: "07:30", titulo: "Natação", cor: "blue", img: "person_swimming", dias: NATACAO, opcional: true,
@@ -670,6 +720,10 @@ function renderChips(now) {
   const rodizio = doy % 3 === 0;
   const nat = HOJE.find(b => b.id === "natacao");
   let html = "";
+  const reg = store.get(dKey(now), { itens: [] }).itens;
+  const ultimo = tipos => reg.filter(x => tipos.includes(x.t)).map(x => x.h).sort().pop();
+  const uLeite = ultimo(["leite"]), uFralda = ultimo(["xixi", "coco"]);
+  if (uLeite || uFralda) html += `<button class="chip" type="button" data-open-diario>📒 ${[uLeite && `Último leite <b>${fmt(uLeite)}</b>`, uFralda && `Última fralda <b>${fmt(uFralda)}</b>`].filter(Boolean).join(" · ")}</button>`;
   if (acordou) html += `<span class="chip">${img("alarm_clock")}${wakeMsg()}<button class="chip-x" type="button" data-wake-reset aria-label="Voltar ao horário normal">✕</button></span>`;
   if (nat && !isSkipped(nat)) html += `<span class="chip">${img("person_swimming")}Natação às ${fmt(nat.ini)}</span>`;
   if (LAVAR.includes(dow)) html += `<span class="chip">${img("basket")}Dia de lavar roupa</span>`;
@@ -828,6 +882,82 @@ $("#tipsBtn").addEventListener("click", () => dlg.showModal());
 $("#tipsClose").addEventListener("click", () => dlg.close());
 dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
 
+/* ---------- diário ---------- */
+const TIPOS = {
+  leite:    { em: "🍼", nome: "Leite",    ph: "ex.: 5 medidas, 180 ml" },
+  comeu:    { em: "🍽️", nome: "Comeu",    ph: "ex.: pão e uva" },
+  xixi:     { em: "💧", nome: "Xixi",     ph: "ex.: vazou" },
+  coco:     { em: "💩", nome: "Cocô",     ph: "ex.: normal" },
+  dormiu:   { em: "😴", nome: "Dormiu",   ph: "ex.: soneca no berço" },
+  acordou:  { em: "🌞", nome: "Acordou",  ph: "ex.: levantou às 6h44" },
+  machucou: { em: "🤕", nome: "Machucou", ph: "ex.: bateu o rosto no móvel" },
+  nota:     { em: "📝", nome: "Nota",     ph: "" },
+};
+const dKey = d => "rotina-" + ymd(d) + "-diario";
+const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+const esc = t => String(t).replace(/[&<>"']/g, c => ESC[c]);
+const nowHM = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+let dDia = new Date();
+const isHojeD = () => ymd(dDia) === ymd(new Date());
+const getD = () => store.get(dKey(dDia), { itens: [], notas: "" });
+const setD = d => { store.set(dKey(dDia), d); updateDiarioBadge(); renderChips(new Date()); };
+
+function updateDiarioBadge() {
+  const n = store.get(dKey(new Date()), { itens: [] }).itens.length;
+  const b = $("#diarioCount");
+  b.hidden = !n; b.textContent = n;
+}
+function renderDiario() {
+  const hoje = isHojeD();
+  $("#dDia").textContent = hoje ? "Hoje" : dDia.toLocaleDateString("pt-BR", { weekday: "short", day: "numeric", month: "short" });
+  $("#dNext").disabled = hoje;
+  const d = getD();
+  const itens = [...d.itens].sort((a, b) => a.h.localeCompare(b.h));
+  $("#log").innerHTML = itens.length
+    ? itens.map(x => `<li><span class="lh">${fmt(x.h)}</span><span class="le">${TIPOS[x.t].em}</span><span class="lt"><b>${TIPOS[x.t].nome}</b>${x.txt ? ` · ${esc(x.txt)}` : ""}</span><button class="chip-x" type="button" data-del="${x.id}" aria-label="Apagar registro">✕</button></li>`).join("")
+    : `<li class="empty">Nenhum registro ${hoje ? "hoje" : "neste dia"}. Toque num botão acima para anotar.</li>`;
+  $("#notes").value = d.notas || "";
+  $("#entryForm").hidden = true;
+}
+$("#quick").innerHTML = Object.entries(TIPOS).map(([k, v]) => `<button class="btn small" type="button" data-tipo="${k}">${v.em} ${v.nome}</button>`).join("");
+$("#quick").addEventListener("click", e => {
+  const b = e.target.closest("[data-tipo]");
+  if (!b) return;
+  const k = b.dataset.tipo, f = $("#entryForm");
+  f.dataset.tipo = k; f.hidden = false;
+  $("#efType").textContent = `${TIPOS[k].em} ${TIPOS[k].nome}`;
+  $("#efTime").value = isHojeD() ? nowHM() : "12:00";
+  $("#efText").value = ""; $("#efText").placeholder = TIPOS[k].ph || "Detalhes (opcional)";
+  $("#efAdjWrap").hidden = !(k === "acordou" && isHojeD());
+  $("#efText").focus();
+});
+$("#entryForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.currentTarget, k = f.dataset.tipo, h = $("#efTime").value;
+  if (!h) return;
+  const d = getD();
+  d.itens.push({ id: Date.now().toString(36), t: k, h, txt: $("#efText").value.trim() });
+  setD(d);
+  if (k === "acordou" && isHojeD() && $("#efAdj").checked) setAcordou(h);
+  renderDiario();
+});
+$("#efCancel").addEventListener("click", () => { $("#entryForm").hidden = true; });
+$("#log").addEventListener("click", e => {
+  const b = e.target.closest("[data-del]");
+  if (!b) return;
+  const d = getD();
+  d.itens = d.itens.filter(x => x.id !== b.dataset.del);
+  setD(d); renderDiario();
+});
+$("#notes").addEventListener("input", e => { const d = getD(); d.notas = e.target.value; setD(d); });
+$("#dPrev").addEventListener("click", () => { dDia = new Date(dDia.getFullYear(), dDia.getMonth(), dDia.getDate() - 1); renderDiario(); });
+$("#dNext").addEventListener("click", () => { dDia = new Date(dDia.getFullYear(), dDia.getMonth(), dDia.getDate() + 1); renderDiario(); });
+const abrirDiario = () => { dDia = new Date(); renderDiario(); $("#diarioDlg").showModal(); };
+$("#diarioBtn").addEventListener("click", abrirDiario);
+$("#chips").addEventListener("click", e => { if (e.target.closest("[data-open-diario]")) abrirDiario(); });
+$("#diarioClose").addEventListener("click", () => $("#diarioDlg").close());
+$("#diarioDlg").addEventListener("click", e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+
 /* ---------- início ---------- */
 (function init() {
   const tema = store.get("rotina-tema", null);
@@ -839,6 +969,7 @@ dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
   const btn = $(`.seg button[data-f="${f}"]`);
   if (btn) btn.click();
   update();
+  updateDiarioBadge();
   setInterval(update, 30000);
 })();
 </script>
