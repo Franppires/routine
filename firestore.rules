@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// Regras do Firestore da Rotina Bebê & Mãe.
+// Cada família só é vista e alterada pelos próprios membros.
+// Para entrar numa família é preciso ter sido convidado por um membro
+// e entrar com o e-mail convidado (confirmado).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function verified() { return request.auth.token.email_verified == true; }
+    function myEmail() { return request.auth.token.email.lower(); }
+    function familia(famId) { return get(/databases/$(database)/documents/familias/$(famId)); }
+    function memberOf(famId) { return request.auth.uid in familia(famId).data.membros; }
+    function convidadoPara(famId) {
+      return verified()
+        && exists(/databases/$(database)/documents/convites/$(myEmail()))
+        && get(/databases/$(database)/documents/convites/$(myEmail())).data.familia == famId;
+    }
+
+    // Qual família cada pessoa usa (só a própria pessoa lê e escreve)
+    match /usuarios/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
+    // Convites por e-mail: criados por membros, lidos/aceitos pela pessoa convidada
+    match /convites/{email} {
+      allow read: if signedIn() && ((verified() && myEmail() == email) || memberOf(resource.data.familia));
+      allow create, update: if signedIn() && memberOf(request.resource.data.familia);
+      allow delete: if signedIn() && ((verified() && myEmail() == email) || memberOf(resource.data.familia));
+    }
+
+    match /familias/{famId} {
+      // Quem cria a família começa sendo o único membro
+      allow create: if signedIn() && request.resource.data.membros == [request.auth.uid];
+      allow read: if signedIn() && request.auth.uid in resource.data.membros;
+      allow update: if signedIn() && (
+        request.auth.uid in resource.data.membros
+        || (convidadoPara(famId)
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['membros', 'membrosInfo', 'convidados'])
+            && request.resource.data.membros.hasAll(resource.data.membros)
+            && request.resource.data.membros.size() == resource.data.membros.size() + 1
+            && request.auth.uid in request.resource.data.membros)
+      );
+
+      // Rotina e diário de cada dia: só membros da família
+      match /dias/{dia} {
+        allow read, write: if signedIn() && memberOf(famId);
+      }
+    }
+  }
+}

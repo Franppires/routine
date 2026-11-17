@@ -113,6 +113,45 @@ dialog::backdrop { background: rgba(20,15,25,.55); backdrop-filter: blur(2px); }
 .dlg-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .dlg-head h2 { margin: 0; font-size: 1.15rem; }
 
+/* ---------- Login e conta ---------- */
+[hidden] { display: none !important; }
+.splash { position: fixed; inset: 0; z-index: 55; display: grid; place-items: center; background: var(--bg); color: var(--muted); font-weight: 700; }
+body.locked { overflow: hidden; }
+.auth { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 16px; background: var(--bg); overflow-y: auto; }
+.auth[hidden] { display: none; }
+.auth-card { width: min(400px, 100%); background: var(--surface); border: 1px solid var(--line); border-radius: 22px; padding: 28px 24px; box-shadow: var(--shadow); text-align: center; }
+.brand.big { justify-content: center; font-size: 1.3rem; margin-bottom: 6px; }
+.brand.big img { width: 34px; height: 34px; }
+.brand.big span { display: inline !important; }
+.auth-sub { color: var(--muted); margin: 0 0 20px; font-size: .93rem; }
+.btn.google { width: 100%; justify-content: center; padding: 11px 14px; font-size: .95rem; }
+.sep { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .8rem; font-weight: 700; margin: 18px 0 14px; }
+.sep::before, .sep::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.auth-form { display: grid; gap: 8px; }
+.auth-form input, .conv input { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; width: 100%; }
+.auth-form input:focus, .conv input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.btn.primary { justify-content: center; padding: 11px 14px; background: var(--accent); border-color: var(--accent); color: var(--on-c); font-size: .95rem; }
+.btn.primary:hover { background: color-mix(in srgb, var(--accent) 85%, #000); }
+.auth-links { display: flex; justify-content: space-between; margin-top: 12px; }
+.link { all: unset; cursor: pointer; color: var(--accent); font-weight: 700; font-size: .88rem; }
+.link:hover, .link:focus-visible { text-decoration: underline; }
+.auth-msg { min-height: 1.2em; margin: 12px 0 0; font-size: .88rem; font-weight: 700; color: var(--c-pink); }
+#cMsg { color: var(--accent); }
+#contaBtn span { max-width: 9em; overflow: hidden; text-overflow: ellipsis; }
+.conta-linha { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.conta-aviso { background: color-mix(in srgb, var(--c-orange) 14%, var(--surface)); border-radius: 12px; padding: 10px 12px; font-size: .88rem; margin: 0 0 8px; }
+.conta-h { margin: 18px 0 2px; font-size: 1rem; }
+.membros { list-style: none; margin: 10px 0; padding: 0; display: grid; gap: 4px; }
+.membros li { display: flex; align-items: center; gap: 10px; background: var(--surface); border-radius: 10px; padding: 8px 12px; }
+.membros li span { flex: 1; min-width: 0; }
+.membros small { color: var(--muted); }
+.membros em { color: var(--accent); font-style: normal; font-weight: 700; font-size: .85rem; }
+.membros .pend { color: var(--muted); }
+.conv { display: flex; gap: 8px; }
+.conv input { flex: 1; padding: 8px 12px; }
+.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 60; background: var(--text); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-weight: 700; font-size: .9rem; box-shadow: 0 8px 24px rgba(0,0,0,.3); max-width: calc(100% - 32px); }
+.toast[hidden] { display: none; }
+
 /* ---------- Diário ---------- */
 .badge { font-style: normal; font-size: .68rem; font-weight: 800; background: var(--accent); color: var(--on-c); border-radius: 99px; padding: 1px 6px; margin-left: 4px; }
 dialog.diario { width: min(640px, calc(100% - 32px)); }
@@ -344,6 +383,7 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   <div class="appbar-in">
     <div class="brand"><img src="img/alarm_clock.png" alt="">Rotina <span>Bebê &amp; Mãe</span></div>
     <div class="actions">
+      <button class="btn ghost" id="contaBtn" title="Conta e família" hidden>👤<span id="contaNome"></span></button>
       <button class="btn ghost" id="diarioBtn" title="Diário do dia">📒<span>Diário</span><em class="badge" id="diarioCount" hidden></em></button>
       <button class="btn ghost" id="tipsBtn" title="Dicas">💡<span>Dicas</span></button>
       <button class="btn ghost" id="print" title="Imprimir">🖨️<span>Imprimir</span></button>
@@ -369,7 +409,7 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   <aside class="aside">
   <section class="hero" id="now" aria-live="polite"></section>
   <div class="chips" id="chips"></div>
-  <footer>
+  <footer id="rodape">
     <p>As marcações ficam salvas neste aparelho e recomeçam a cada novo dia.</p>
   </footer>
   </aside>
@@ -390,6 +430,46 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   </div>
   </div>
 </div>
+
+<div class="auth" id="auth" hidden>
+  <div class="auth-card">
+    <div class="brand big"><img src="img/alarm_clock.png" alt="">Rotina <span>Bebê &amp; Mãe</span></div>
+    <p class="auth-sub">Entre para salvar a rotina e o diário e usar em qualquer aparelho, junto com a sua família.</p>
+    <button class="btn google" type="button" id="gBtn"><svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Entrar com Google</button>
+    <div class="sep"><span>ou com e-mail</span></div>
+    <form id="emailForm" class="auth-form">
+      <input type="email" id="aEmail" placeholder="E-mail" required autocomplete="email">
+      <input type="password" id="aPass" placeholder="Senha (mínimo 6 caracteres)" required minlength="6" autocomplete="current-password">
+      <button class="btn primary" type="submit" id="aSubmit">Entrar</button>
+    </form>
+    <div class="auth-links">
+      <button type="button" class="link" id="aToggle">Criar conta</button>
+      <button type="button" class="link" id="aForgot">Esqueci a senha</button>
+    </div>
+    <p class="auth-msg" id="aMsg" role="alert"></p>
+  </div>
+</div>
+
+<dialog id="contaDlg" aria-labelledby="contaTitle">
+  <div class="dlg-head">
+    <h2 id="contaTitle">👤 Conta e família</h2>
+    <button class="btn ghost" type="button" id="contaClose" aria-label="Fechar">✕</button>
+  </div>
+  <p class="conta-linha">Entrou como <b id="cEmail"></b> <button class="btn small ghost" type="button" id="sair">Sair</button></p>
+  <p class="conta-aviso" id="cVerify" hidden>Confirme seu e-mail pelo link que enviamos (veja também o spam). <button class="btn small" type="button" id="reenviar">Reenviar</button></p>
+  <h3 class="conta-h">Família</h3>
+  <p class="dlg-foot">Só quem está na família vê e marca a rotina e o diário.</p>
+  <ul class="membros" id="cMembros"></ul>
+  <form class="conv" id="convForm">
+    <input type="email" id="convEmail" placeholder="E-mail de quem você quer convidar" required aria-label="E-mail do convidado">
+    <button class="btn small" type="submit">Convidar</button>
+  </form>
+  <p class="auth-msg" id="cMsg" role="status"></p>
+  <p class="dlg-foot">A pessoa convidada abre o app e entra com esse e-mail (Google ou e-mail e senha). Pronto: passa a ver a mesma rotina.</p>
+</dialog>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<div class="splash" id="splash" hidden>Carregando…</div>
 
 <dialog id="diarioDlg" class="diario" aria-labelledby="diarioTitle">
   <div class="dlg-head">
@@ -413,7 +493,7 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   <ol class="log" id="log"></ol>
   <label class="notes-l" for="notes">Anotações do dia</label>
   <textarea id="notes" rows="4" placeholder="Algo diferente hoje? Escreva ou cole aqui."></textarea>
-  <p class="dlg-foot">Fica salvo só neste aparelho.</p>
+  <p class="dlg-foot">Com login, fica salvo na nuvem e aparece para toda a família.</p>
 </dialog>
 
 <dialog id="tipsDlg" aria-labelledby="tipsTitle">
@@ -424,14 +504,20 @@ footer p { width: 100%; text-align: center; color: var(--muted); font-size: .8re
   <div class="tip-grid" id="tips"></div>
 </dialog>
 
-<script>
+<script type="module">
+/* ===== Firebase =====
+   Enquanto FIREBASE_CONFIG for null, o app funciona só neste aparelho (sem login).
+   Depois de criar o projeto no Firebase, cole aqui o objeto firebaseConfig. */
+const FIREBASE_CONFIG = null;
+const FB_VER = "10.12.2";
+
+/* ===== Rotina ===== */
 /* Dias da semana: 0=dom 1=seg 2=ter 3=qua 4=qui 5=sex 6=sáb */
 const LAVAR = [2, 4];              // roupa só terça e quinta
 const NATACAO = [1, 3, 5];         // natação segunda, quarta e sexta
 const NOMES = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-/* Blocos pulados combinados de antemão (a pessoa pode desfazer na tela) */
+/* Padrões combinados de antemão (podem ser desfeitos na tela) */
 const PULOS_PADRAO = { "2026-11-16": ["natacao"] };
-/* Horário em que o bebê acordou, informado de antemão (a pessoa pode mudar/desfazer na tela) */
 const ACORDOU_PADRAO = { "2026-11-16": "06:24", "2026-11-17": "06:00" };
 
 const ROTINA = [
@@ -500,7 +586,7 @@ const ROTINA = [
     mae:  { tit: "Descanso", txt: "Colocar o bebê para dormir no fim do ritual e ter a noite livre.",
             tasks: ["Bebê dormindo", { t: "Separar mochila da natação", dias: [0, 2, 4] }] } },
 ];
-/* ids da versão anterior (por posição) → ids estáveis, para não perder marcações */
+/* ids da primeira versão (por posição) → ids estáveis */
 const OLD = ["acordar", "tapete", "lanche-manha", "passeio", "almoco", "higiene", "soneca", "lanche-tarde", "sensorial", "leitura", "banho", "noite"];
 
 const DICAS = [
@@ -510,7 +596,18 @@ const DICAS = [
   { id: "soneca", img: "stopwatch", t: "Teto rigoroso na soneca", d: "Para zerar os despertares de madrugada, não deixe a soneca passar das 14h30–15h00. Se dormir demais à tarde, ele perde o sono à noite." },
 ];
 
-/* ---------- utilitários ---------- */
+const TIPOS = {
+  leite:    { em: "🍼", nome: "Leite",    ph: "ex.: 5 medidas, 180 ml" },
+  comeu:    { em: "🍽️", nome: "Comeu",    ph: "ex.: pão e uva" },
+  xixi:     { em: "💧", nome: "Xixi",     ph: "ex.: vazou" },
+  coco:     { em: "💩", nome: "Cocô",     ph: "ex.: normal" },
+  dormiu:   { em: "😴", nome: "Dormiu",   ph: "ex.: soneca no berço" },
+  acordou:  { em: "🌞", nome: "Acordou",  ph: "ex.: levantou às 6h44" },
+  machucou: { em: "🤕", nome: "Machucou", ph: "ex.: bateu o rosto no móvel" },
+  nota:     { em: "📝", nome: "Nota",     ph: "" },
+};
+
+/* ===== utilitários ===== */
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const toMin = hm => { const [h, m] = hm.split(":").map(Number); return h * 60 + m; };
@@ -519,39 +616,96 @@ const fmtDur = d => d >= 60 ? `${Math.floor(d / 60)}h${d % 60 ? String(d % 60).p
 const img = (n, alt = "") => `<img src="img/${n}.png" alt="${alt}">`;
 const pad = n => String(n).padStart(2, "0");
 const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-const store = {
+const toHM = m => `${pad(Math.floor(m / 60) % 24)}:${pad(m % 60)}`;
+const hojeY = () => ymd(new Date());
+const nowMin = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
+const nowHM = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+const esc = t => String(t).replace(/[&<>"']/g, c => ESC[c]);
+/* preferências deste aparelho (tema, filtro) e modo sem login */
+const prefs = {
   get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
-  del(k) { try { localStorage.removeItem(k); } catch {} },
 };
-const dayKey = () => "rotina-" + ymd(new Date());
-const nowMin = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
+function aviso(m) {
+  const t = $("#toast");
+  t.textContent = m; t.hidden = false;
+  clearTimeout(aviso.t); aviso.t = setTimeout(() => { t.hidden = true; }, 5000);
+}
 
-const toHM = m => `${pad(Math.floor(m / 60) % 24)}:${pad(m % 60)}`;
-let currentDay, checks, pulos, horarios, acordou, deltaDia = 0, manual, heroKey, HOJE;
+/* ===== Dados de cada dia (memória + aparelho ou nuvem) ===== */
+const vazio = () => ({ checks: {}, pulos: null, horarios: {}, acordou: null, diario: { itens: [], notas: "" } });
+const norm = d => ({
+  checks: d?.checks || {}, pulos: d?.pulos ?? null, horarios: d?.horarios || {}, acordou: d?.acordou ?? null,
+  diario: { itens: d?.diario?.itens || [], notas: d?.diario?.notas || "" },
+});
+const cache = {};
+let modo = "local";                        // "local" (sem login) ou "nuvem"
+let fb = null, auth = null, db = null, famRef = null, famData = null, usuario = null;
+const unsubs = {};
+
+function lerLocal(y) {
+  const v2 = prefs.get("rotina-v2-" + y, null);
+  if (v2) return norm(v2);
+  // formato antigo: uma chave por tipo de dado
+  const checks = prefs.get("rotina-" + y, {});
+  for (const k of Object.keys(checks)) {
+    const m = k.match(/^(\d+)-(bebe|mae)-(\d+)$/);
+    if (m && OLD[m[1]]) { checks[`${OLD[m[1]]}-${m[2]}-${m[3]}`] = checks[k]; delete checks[k]; }
+  }
+  return norm({
+    checks, pulos: prefs.get(`rotina-${y}-pulos`, null), horarios: prefs.get(`rotina-${y}-horarios`, {}),
+    acordou: prefs.get(`rotina-${y}-acordou`, null), diario: prefs.get(`rotina-${y}-diario`, null),
+  });
+}
+function dia(y) { if (!cache[y]) cache[y] = modo === "local" ? lerLocal(y) : vazio(); return cache[y]; }
+const pulosPadrao = y => Object.fromEntries((PULOS_PADRAO[y] || []).map(id => [id, true]));
+
+let notasTimer = null;
+function mudar(y, op, a, b) {
+  const D = dia(y);
+  let patch = null;
+  switch (op) {
+    case "check":   D.checks[a] = b; patch = { checks: { [a]: b } }; break;
+    case "pulo":    D.pulos = { ...(D.pulos ?? pulosPadrao(y)), [a]: b }; patch = { pulos: D.pulos }; break;
+    case "horario": if (b) D.horarios[a] = b; else delete D.horarios[a];
+                    patch = { horarios: { [a]: b || (fb && fb.deleteField()) } }; break;
+    case "acordou": D.acordou = a; patch = { acordou: a }; break;
+    case "addItem": D.diario.itens.push(a); patch = { diario: { itens: fb && fb.arrayUnion(a) } }; break;
+    case "delItem": D.diario.itens = D.diario.itens.filter(x => x.id !== a.id); patch = { diario: { itens: fb && fb.arrayRemove(a) } }; break;
+    case "notas":   D.diario.notas = a; patch = { diario: { notas: a } }; break;
+    case "zerar":   D.checks = {}; break;
+  }
+  if (modo === "local") { prefs.set("rotina-v2-" + y, D); return; }
+  const ref = fb.doc(famRef, "dias", y);
+  const salvar = () => (op === "zerar"
+      ? fb.setDoc(ref, { checks: {} }, { mergeFields: ["checks"] })
+      : fb.setDoc(ref, patch, { merge: true }))
+    .catch(e => aviso("Não consegui salvar na nuvem: " + e.message));
+  if (op === "notas") { clearTimeout(notasTimer); notasTimer = setTimeout(salvar, 600); } else salvar();
+}
+
+/* ===== Estado do dia atual ===== */
+let currentDay, checks, pulos, horarios, acordou, deltaDia = 0, manual = {}, heroKey = null, HOJE = [];
 
 const tasksHoje = (tasks, dow) => tasks
   .map((t, j) => typeof t === "string" ? { t, j } : { t: t.t, j, dias: t.dias })
   .filter(x => !x.dias || x.dias.includes(dow));
 
+function derive() {
+  const D = dia(currentDay);
+  checks = D.checks;
+  pulos = D.pulos ?? pulosPadrao(currentDay);
+  horarios = D.horarios;
+  acordou = D.acordou ?? (ACORDOU_PADRAO[currentDay] || "");
+}
 function loadDay() {
-  const hoje = new Date(), dow = hoje.getDay();
-  currentDay = dayKey();
-  checks = store.get(currentDay, {});
-  let migrou = false;
-  for (const k of Object.keys(checks)) {
-    const m = k.match(/^(\d+)-(bebe|mae)-(\d+)$/);
-    if (m && OLD[m[1]]) { checks[`${OLD[m[1]]}-${m[2]}-${m[3]}`] = checks[k]; delete checks[k]; migrou = true; }
-  }
-  if (migrou) store.set(currentDay, checks);
-  pulos = store.get(currentDay + "-pulos", null) ||
-          Object.fromEntries((PULOS_PADRAO[ymd(hoje)] || []).map(id => [id, true]));
-  horarios = store.get(currentDay + "-horarios", {});
-  acordou = store.get(currentDay + "-acordou", ACORDOU_PADRAO[ymd(hoje)] || "");
+  currentDay = hojeY();
   manual = {}; heroKey = null;
+  derive();
   buildHoje();
 }
-/* Monta os blocos de hoje: filtra pelo dia da semana e aplica reagendamentos */
+/* Monta os blocos de hoje: filtra pelo dia da semana e aplica horário de acordar e reagendamentos */
 function buildHoje() {
   const dow = new Date().getDay();
   const base = ROTINA.find(b => b.id === "acordar").ini;
@@ -580,7 +734,7 @@ const blockIds = b => isSkipped(b) ? [] : [
   ...b.mae.list.map(x => `${b.id}-mae-${x.j}`),
 ];
 
-/* ---------- peças de HTML ---------- */
+/* ===== HTML ===== */
 const taskHTML = (id, t) =>
   `<li><label class="task"><input type="checkbox" data-id="${id}" ${checks[id] ? "checked" : ""}><span class="box" aria-hidden="true"></span><span class="txt">${t}</span></label></li>`;
 const sideHTML = (b, who, withDesc) => {
@@ -593,7 +747,6 @@ const sideHTML = (b, who, withDesc) => {
                     : (withDesc ? "" : `<p class="desc none">${s.txt}</p>`)}
   </div>`;
 };
-
 const wakeMsg = () => `Acordou às <b>${fmt(acordou)}</b> — dia ${deltaDia < 0 ? "adiantado" : "atrasado"} ${fmtDur(Math.abs(deltaDia))}`;
 const wakeBar = () => `<div class="skipbar">
   <span class="resched-msg">${acordou ? wakeMsg() + "." : "Acordou em outro horário? O dia se ajusta sozinho."}</span>
@@ -653,8 +806,9 @@ function setCollapsed(b, c) {
 function syncExpandLabel() {
   $("#expand").textContent = $(".slot.collapsed") ? "Expandir tudo" : "Recolher tudo";
 }
+function syncChecks() { $$("input[data-id]").forEach(x => { x.checked = !!checks[x.dataset.id]; }); }
 
-/* ---------- progresso ---------- */
+/* ===== Progresso ===== */
 function counts() {
   let tot = 0, dn = 0;
   HOJE.forEach(b => {
@@ -670,7 +824,7 @@ function counts() {
   if (msg) msg.textContent = dn === tot ? "todas as tarefas de hoje concluídas 🎉" : `você concluiu ${dn} de ${tot} tarefas hoje`;
 }
 
-/* ---------- card "Agora" ---------- */
+/* ===== Card "Agora" ===== */
 function renderHero(cur, m, list) {
   const hero = $("#now"), first = list[0];
   const before = m < toMin(first.ini);
@@ -712,17 +866,17 @@ function renderHero(cur, m, list) {
   }
 }
 
-/* ---------- lembretes do dia ---------- */
+/* ===== Lembretes do dia ===== */
 function renderChips(now) {
   const dow = now.getDay();
   const lote = dow === 0 || dow === 3;
   const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 864e5);
   const rodizio = doy % 3 === 0;
   const nat = HOJE.find(b => b.id === "natacao");
-  let html = "";
-  const reg = store.get(dKey(now), { itens: [] }).itens;
+  const reg = dia(currentDay).diario.itens;
   const ultimo = tipos => reg.filter(x => tipos.includes(x.t)).map(x => x.h).sort().pop();
   const uLeite = ultimo(["leite"]), uFralda = ultimo(["xixi", "coco"]);
+  let html = "";
   if (uLeite || uFralda) html += `<button class="chip" type="button" data-open-diario>📒 ${[uLeite && `Último leite <b>${fmt(uLeite)}</b>`, uFralda && `Última fralda <b>${fmt(uFralda)}</b>`].filter(Boolean).join(" · ")}</button>`;
   if (acordou) html += `<span class="chip">${img("alarm_clock")}${wakeMsg()}<button class="chip-x" type="button" data-wake-reset aria-label="Voltar ao horário normal">✕</button></span>`;
   if (nat && !isSkipped(nat)) html += `<span class="chip">${img("person_swimming")}Natação às ${fmt(nat.ini)}</span>`;
@@ -740,9 +894,12 @@ function renderChips(now) {
   $("#tipsBtn").classList.toggle("has-dot", algumaHoje);
 }
 
-/* ---------- ciclo principal ---------- */
+/* ===== Ciclo principal ===== */
 function update() {
-  if (dayKey() !== currentDay) { loadDay(); renderBlocks(); }
+  if (hojeY() !== currentDay) {
+    loadDay(); renderBlocks();
+    if (modo === "nuvem") ouvirDia(currentDay);
+  }
   const now = new Date(), m = nowMin(), h = now.getHours();
   const [sauda, icone] = h < 12 ? ["Bom dia", "sun"] : h < 18 ? ["Boa tarde", "sun_behind_cloud"] : ["Boa noite", "crescent_moon"];
   $("#greet").innerHTML = `${img(icone)}${sauda}`;
@@ -768,6 +925,7 @@ function update() {
   renderHero(cur, m, list);
   renderChips(now);
   counts();
+  updateDiarioBadge();
   syncExpandLabel();
 }
 
@@ -777,14 +935,9 @@ function goTo(id) {
   manual[id] = false; setCollapsed(b, false); syncExpandLabel();
   slotOf(b).scrollIntoView({ behavior: "smooth", block: "start" });
 }
+function setAcordou(v) { mudar(currentDay, "acordou", v); derive(); manual = {}; rebuild(); }
 
-/* ---------- eventos ---------- */
-function setAcordou(v) {
-  acordou = v;
-  store.set(currentDay + "-acordou", v);
-  manual = {};
-  rebuild();
-}
+/* ===== Eventos da rotina ===== */
 document.addEventListener("click", e => {
   const w = e.target.closest("[data-wake]");
   if (w) {
@@ -800,17 +953,15 @@ document.addEventListener("change", e => {
   const rid = e.target.dataset && e.target.dataset.reschedInput;
   if (rid) {
     if (!e.target.value) return;
-    horarios[rid] = e.target.value; pulos[rid] = false;
-    store.set(currentDay + "-horarios", horarios); store.set(currentDay + "-pulos", pulos);
-    delete manual[rid];
-    rebuild();
+    mudar(currentDay, "horario", rid, e.target.value);
+    mudar(currentDay, "pulo", rid, false);
+    derive(); delete manual[rid]; rebuild();
     return;
   }
   const id = e.target.dataset && e.target.dataset.id;
   if (!id) return;
-  checks[id] = e.target.checked;
-  store.set(currentDay, checks);
-  $$(`input[data-id="${id}"]`).forEach(x => x.checked = e.target.checked);
+  mudar(currentDay, "check", id, e.target.checked);
+  $$(`input[data-id="${id}"]`).forEach(x => { x.checked = e.target.checked; });
   counts();
 });
 $("#blocks").addEventListener("click", e => {
@@ -822,19 +973,12 @@ $("#blocks").addEventListener("click", e => {
     return;
   }
   const rr = e.target.closest("[data-reset]");
-  if (rr) {
-    delete horarios[rr.dataset.reset];
-    store.set(currentDay + "-horarios", horarios);
-    rebuild();
-    return;
-  }
+  if (rr) { mudar(currentDay, "horario", rr.dataset.reset, null); derive(); rebuild(); return; }
   const skip = e.target.closest("[data-skip]");
   if (skip) {
     const id = skip.dataset.skip;
-    pulos[id] = !pulos[id];
-    store.set(currentDay + "-pulos", pulos);
-    delete manual[id]; heroKey = null;
-    update();
+    mudar(currentDay, "pulo", id, !pulos[id]);
+    derive(); delete manual[id]; heroKey = null; update();
     return;
   }
   const head = e.target.closest(".card-head");
@@ -850,7 +994,7 @@ $$(".seg button").forEach(btn => btn.addEventListener("click", () => {
   $$(".seg button").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
   document.body.classList.remove("f-bebe", "f-mae");
   if (btn.dataset.f !== "tudo") document.body.classList.add("f-" + btn.dataset.f);
-  store.set("rotina-filtro", btn.dataset.f);
+  prefs.set("rotina-filtro", btn.dataset.f);
 }));
 $("#expand").addEventListener("click", () => {
   const abrir = !!$(".slot.collapsed");
@@ -867,57 +1011,50 @@ $("#goNow").addEventListener("click", () => {
 $("#print").addEventListener("click", () => window.print());
 $("#reset").addEventListener("click", () => {
   if (!confirm("Desmarcar todas as tarefas de hoje?")) return;
-  checks = {}; store.del(currentDay);
-  $$("input[data-id]").forEach(x => x.checked = false);
-  counts();
+  mudar(currentDay, "zerar"); derive(); syncChecks(); counts();
 });
 $("#theme").addEventListener("click", () => {
   const root = document.documentElement;
   const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
   root.dataset.theme = dark ? "light" : "dark";
-  store.set("rotina-tema", root.dataset.theme);
+  prefs.set("rotina-tema", root.dataset.theme);
 });
-const dlg = $("#tipsDlg");
-$("#tipsBtn").addEventListener("click", () => dlg.showModal());
-$("#tipsClose").addEventListener("click", () => dlg.close());
-dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+const fecharAoClicarFora = d => d.addEventListener("click", e => { if (e.target === d) d.close(); });
+$("#tipsBtn").addEventListener("click", () => $("#tipsDlg").showModal());
+$("#tipsClose").addEventListener("click", () => $("#tipsDlg").close());
+fecharAoClicarFora($("#tipsDlg"));
 
-/* ---------- diário ---------- */
-const TIPOS = {
-  leite:    { em: "🍼", nome: "Leite",    ph: "ex.: 5 medidas, 180 ml" },
-  comeu:    { em: "🍽️", nome: "Comeu",    ph: "ex.: pão e uva" },
-  xixi:     { em: "💧", nome: "Xixi",     ph: "ex.: vazou" },
-  coco:     { em: "💩", nome: "Cocô",     ph: "ex.: normal" },
-  dormiu:   { em: "😴", nome: "Dormiu",   ph: "ex.: soneca no berço" },
-  acordou:  { em: "🌞", nome: "Acordou",  ph: "ex.: levantou às 6h44" },
-  machucou: { em: "🤕", nome: "Machucou", ph: "ex.: bateu o rosto no móvel" },
-  nota:     { em: "📝", nome: "Nota",     ph: "" },
-};
-const dKey = d => "rotina-" + ymd(d) + "-diario";
-const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
-const esc = t => String(t).replace(/[&<>"']/g, c => ESC[c]);
-const nowHM = () => { const d = new Date(); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+/* ===== Diário ===== */
 let dDia = new Date();
-const isHojeD = () => ymd(dDia) === ymd(new Date());
-const getD = () => store.get(dKey(dDia), { itens: [], notas: "" });
-const setD = d => { store.set(dKey(dDia), d); updateDiarioBadge(); renderChips(new Date()); };
+const yD = () => ymd(dDia);
+const isHojeD = () => yD() === currentDay;
 
 function updateDiarioBadge() {
-  const n = store.get(dKey(new Date()), { itens: [] }).itens.length;
+  const n = dia(currentDay).diario.itens.length;
   const b = $("#diarioCount");
   b.hidden = !n; b.textContent = n;
 }
-function renderDiario() {
+function renderDiario(deFora = false) {
   const hoje = isHojeD();
   $("#dDia").textContent = hoje ? "Hoje" : dDia.toLocaleDateString("pt-BR", { weekday: "short", day: "numeric", month: "short" });
   $("#dNext").disabled = hoje;
-  const d = getD();
+  const d = dia(yD()).diario;
   const itens = [...d.itens].sort((a, b) => a.h.localeCompare(b.h));
   $("#log").innerHTML = itens.length
-    ? itens.map(x => `<li><span class="lh">${fmt(x.h)}</span><span class="le">${TIPOS[x.t].em}</span><span class="lt"><b>${TIPOS[x.t].nome}</b>${x.txt ? ` · ${esc(x.txt)}` : ""}</span><button class="chip-x" type="button" data-del="${x.id}" aria-label="Apagar registro">✕</button></li>`).join("")
+    ? itens.map(x => `<li><span class="lh">${fmt(x.h)}</span><span class="le">${TIPOS[x.t]?.em || "•"}</span><span class="lt"><b>${TIPOS[x.t]?.nome || ""}</b>${x.txt ? ` · ${esc(x.txt)}` : ""}${x.por ? ` <small>— ${esc(x.por)}</small>` : ""}</span><button class="chip-x" type="button" data-del="${x.id}" aria-label="Apagar registro">✕</button></li>`).join("")
     : `<li class="empty">Nenhum registro ${hoje ? "hoje" : "neste dia"}. Toque num botão acima para anotar.</li>`;
-  $("#notes").value = d.notas || "";
-  $("#entryForm").hidden = true;
+  if (!(deFora && document.activeElement === $("#notes"))) $("#notes").value = d.notas || "";
+  if (!deFora) $("#entryForm").hidden = true;
+}
+async function irDia(delta) {
+  dDia = new Date(dDia.getFullYear(), dDia.getMonth(), dDia.getDate() + delta);
+  const y = yD();
+  if (modo === "nuvem" && !(y in cache)) {
+    $("#log").innerHTML = `<li class="empty">Carregando…</li>`;
+    try { cache[y] = norm((await fb.getDoc(fb.doc(famRef, "dias", y))).data()); }
+    catch (e) { aviso("Não consegui abrir esse dia: " + e.message); cache[y] = vazio(); }
+  }
+  renderDiario();
 }
 $("#quick").innerHTML = Object.entries(TIPOS).map(([k, v]) => `<button class="btn small" type="button" data-tipo="${k}">${v.em} ${v.nome}</button>`).join("");
 $("#quick").addEventListener("click", e => {
@@ -933,44 +1070,257 @@ $("#quick").addEventListener("click", e => {
 });
 $("#entryForm").addEventListener("submit", e => {
   e.preventDefault();
-  const f = e.currentTarget, k = f.dataset.tipo, h = $("#efTime").value;
+  const k = e.currentTarget.dataset.tipo, h = $("#efTime").value;
   if (!h) return;
-  const d = getD();
-  d.itens.push({ id: Date.now().toString(36), t: k, h, txt: $("#efText").value.trim() });
-  setD(d);
+  const item = { id: Date.now().toString(36), t: k, h, txt: $("#efText").value.trim() };
+  if (usuario) item.por = (usuario.displayName || usuario.email || "").split(/[ @]/)[0];
+  mudar(yD(), "addItem", item);
   if (k === "acordou" && isHojeD() && $("#efAdj").checked) setAcordou(h);
-  renderDiario();
+  renderDiario(); renderChips(new Date()); updateDiarioBadge();
 });
 $("#efCancel").addEventListener("click", () => { $("#entryForm").hidden = true; });
 $("#log").addEventListener("click", e => {
   const b = e.target.closest("[data-del]");
   if (!b) return;
-  const d = getD();
-  d.itens = d.itens.filter(x => x.id !== b.dataset.del);
-  setD(d); renderDiario();
+  const item = dia(yD()).diario.itens.find(x => x.id === b.dataset.del);
+  if (item) mudar(yD(), "delItem", item);
+  renderDiario(); renderChips(new Date()); updateDiarioBadge();
 });
-$("#notes").addEventListener("input", e => { const d = getD(); d.notas = e.target.value; setD(d); });
-$("#dPrev").addEventListener("click", () => { dDia = new Date(dDia.getFullYear(), dDia.getMonth(), dDia.getDate() - 1); renderDiario(); });
-$("#dNext").addEventListener("click", () => { dDia = new Date(dDia.getFullYear(), dDia.getMonth(), dDia.getDate() + 1); renderDiario(); });
+$("#notes").addEventListener("input", e => mudar(yD(), "notas", e.target.value));
+$("#dPrev").addEventListener("click", () => irDia(-1));
+$("#dNext").addEventListener("click", () => irDia(1));
 const abrirDiario = () => { dDia = new Date(); renderDiario(); $("#diarioDlg").showModal(); };
 $("#diarioBtn").addEventListener("click", abrirDiario);
 $("#chips").addEventListener("click", e => { if (e.target.closest("[data-open-diario]")) abrirDiario(); });
 $("#diarioClose").addEventListener("click", () => $("#diarioDlg").close());
-$("#diarioDlg").addEventListener("click", e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+fecharAoClicarFora($("#diarioDlg"));
 
-/* ---------- início ---------- */
-(function init() {
-  const tema = store.get("rotina-tema", null);
-  if (tema) document.documentElement.dataset.theme = tema;
-  loadDay();
-  renderTips();
-  renderBlocks();
-  const f = store.get("rotina-filtro", "tudo");
-  const btn = $(`.seg button[data-f="${f}"]`);
-  if (btn) btn.click();
+/* ===== Nuvem: login, família e sincronização ===== */
+const ERROS = {
+  "auth/invalid-credential": "E-mail ou senha incorretos.",
+  "auth/wrong-password": "E-mail ou senha incorretos.",
+  "auth/user-not-found": "Não existe conta com esse e-mail. Toque em “Criar conta”.",
+  "auth/email-already-in-use": "Já existe uma conta com esse e-mail. Toque em “Entrar”.",
+  "auth/weak-password": "A senha precisa ter pelo menos 6 caracteres.",
+  "auth/invalid-email": "E-mail inválido.",
+  "auth/too-many-requests": "Muitas tentativas. Espere um pouco e tente de novo.",
+  "auth/network-request-failed": "Sem internet. Verifique a conexão.",
+  "auth/unauthorized-domain": "Este endereço ainda não está autorizado no Firebase.",
+  "permission-denied": "Sem permissão para acessar esses dados.",
+};
+const erroMsg = e => ERROS[e?.code] || e?.message || String(e);
+const primeiroNome = u => (u?.displayName || u?.email || "").split(/[ @]/)[0];
+
+async function carregarFirebase() {
+  const base = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
+  const [app, a, f] = await Promise.all([
+    import(base + "firebase-app.js"), import(base + "firebase-auth.js"), import(base + "firebase-firestore.js"),
+  ]);
+  fb = { ...a, ...f };
+  const appI = app.initializeApp(FIREBASE_CONFIG);
+  auth = a.getAuth(appI);
+  auth.languageCode = "pt-BR";
+  db = f.initializeFirestore(appI, { localCache: f.persistentLocalCache({ tabManager: f.persistentMultipleTabManager() }) });
+}
+
+/* Entra na família: aceita convite pendente, usa a família já salva ou cria uma nova */
+async function entrarFamilia(user) {
+  const info = { email: user.email || "", nome: user.displayName || "" };
+  const uref = fb.doc(db, "usuarios", user.uid);
+  let famId = (await fb.getDoc(uref)).data()?.familia || null;
+  const email = (user.email || "").toLowerCase();
+  if (email && user.emailVerified) {
+    const cref = fb.doc(db, "convites", email);
+    const c = await fb.getDoc(cref).catch(() => null);
+    if (c && c.exists() && c.data().familia !== famId) {
+      const novo = c.data().familia;
+      await fb.updateDoc(fb.doc(db, "familias", novo), {
+        membros: fb.arrayUnion(user.uid), [`membrosInfo.${user.uid}`]: info, convidados: fb.arrayRemove(email),
+      });
+      await fb.deleteDoc(cref);
+      famId = novo;
+      aviso("Você entrou na rotina da família. 💛");
+    }
+  }
+  if (!famId) {
+    const f = await fb.addDoc(fb.collection(db, "familias"), {
+      membros: [user.uid], membrosInfo: { [user.uid]: info }, convidados: [], criadoEm: fb.serverTimestamp(),
+    });
+    famId = f.id;
+  }
+  await fb.setDoc(uref, { familia: famId }, { merge: true });
+  famRef = fb.doc(db, "familias", famId);
+}
+
+/* Sobe para a nuvem o que estava salvo só neste aparelho (uma vez por conta) */
+async function migrarLocal() {
+  const marca = "rotina-migrado-" + usuario.uid;
+  if (prefs.get(marca, false)) return;
+  const datas = new Set();
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const m = (localStorage.key(i) || "").match(/^rotina-(?:v2-)?(\d{4}-\d{2}-\d{2})/);
+      if (m) datas.add(m[1]);
+    }
+  } catch {}
+  for (const y of datas) {
+    const D = lerLocal(y), patch = {};
+    if (Object.keys(D.checks).length) patch.checks = D.checks;
+    if (D.pulos) patch.pulos = D.pulos;
+    if (Object.keys(D.horarios).length) patch.horarios = D.horarios;
+    if (D.acordou) patch.acordou = D.acordou;
+    if (D.diario.itens.length || D.diario.notas) {
+      patch.diario = {};
+      if (D.diario.itens.length) patch.diario.itens = fb.arrayUnion(...D.diario.itens);
+      if (D.diario.notas) patch.diario.notas = D.diario.notas;
+    }
+    if (Object.keys(patch).length) await fb.setDoc(fb.doc(famRef, "dias", y), patch, { merge: true });
+  }
+  prefs.set(marca, true);
+}
+
+const estrutura = () => JSON.stringify([pulos, horarios, acordou]);
+function ouvirDia(y) {
+  unsubs.dia?.();
+  unsubs.dia = fb.onSnapshot(fb.doc(famRef, "dias", y), snap => {
+    if (y !== currentDay) return;
+    const antes = estrutura();
+    cache[y] = norm(snap.data());
+    derive();
+    if (estrutura() !== antes) rebuild(); else { syncChecks(); counts(); renderChips(new Date()); updateDiarioBadge(); }
+    if ($("#diarioDlg").open && yD() === y) renderDiario(true);
+  }, e => aviso("Erro ao ler da nuvem: " + erroMsg(e)));
+}
+function ouvirFamilia() {
+  unsubs.fam?.();
+  unsubs.fam = fb.onSnapshot(famRef, s => { famData = s.data(); renderConta(); });
+}
+function renderConta() {
+  if (!usuario) return;
+  $("#contaNome").textContent = primeiroNome(usuario);
+  $("#cEmail").textContent = usuario.email || "";
+  $("#cVerify").hidden = !!usuario.emailVerified;
+  const info = famData?.membrosInfo || {};
+  $("#cMembros").innerHTML =
+    Object.entries(info).map(([uid, m]) => `<li>👤 <span>${esc(m.nome || m.email)}${m.nome ? ` <small>${esc(m.email)}</small>` : ""}${uid === usuario.uid ? " <em>(você)</em>" : ""}</span></li>`).join("") +
+    (famData?.convidados || []).map(em => `<li class="pend">✉️ <span>${esc(em)} <small>convite pendente</small></span><button class="chip-x" type="button" data-desconvidar="${esc(em)}" aria-label="Cancelar convite">✕</button></li>`).join("");
+}
+
+let cadastro = false;
+function mostrarLogin(msg = "") { $("#auth").hidden = false; document.body.classList.add("locked"); $("#aMsg").textContent = msg; }
+function esconderLogin() { $("#auth").hidden = true; document.body.classList.remove("locked"); }
+
+function ligarLogin() {
+  $("#gBtn").addEventListener("click", async () => {
+    $("#aMsg").textContent = "";
+    const prov = new fb.GoogleAuthProvider();
+    try { await fb.signInWithPopup(auth, prov); }
+    catch (e) {
+      if (["auth/popup-blocked", "auth/operation-not-supported-in-this-environment"].includes(e.code)) return fb.signInWithRedirect(auth, prov);
+      if (!["auth/popup-closed-by-user", "auth/cancelled-popup-request"].includes(e.code)) $("#aMsg").textContent = erroMsg(e);
+    }
+  });
+  $("#emailForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const em = $("#aEmail").value.trim(), pw = $("#aPass").value;
+    $("#aMsg").textContent = "";
+    try {
+      if (cadastro) {
+        const c = await fb.createUserWithEmailAndPassword(auth, em, pw);
+        await fb.sendEmailVerification(c.user).catch(() => {});
+      } else await fb.signInWithEmailAndPassword(auth, em, pw);
+    } catch (er) { $("#aMsg").textContent = erroMsg(er); }
+  });
+  $("#aToggle").addEventListener("click", () => {
+    cadastro = !cadastro;
+    $("#aSubmit").textContent = cadastro ? "Criar conta" : "Entrar";
+    $("#aToggle").textContent = cadastro ? "Já tenho conta" : "Criar conta";
+    $("#aPass").autocomplete = cadastro ? "new-password" : "current-password";
+  });
+  $("#aForgot").addEventListener("click", async () => {
+    const em = $("#aEmail").value.trim();
+    if (!em) { $("#aMsg").textContent = "Digite seu e-mail acima e toque de novo em “Esqueci a senha”."; return; }
+    try { await fb.sendPasswordResetEmail(auth, em); $("#aMsg").textContent = "Enviamos um link para criar uma nova senha no seu e-mail."; }
+    catch (er) { $("#aMsg").textContent = erroMsg(er); }
+  });
+  $("#contaBtn").addEventListener("click", () => { $("#cMsg").textContent = ""; renderConta(); $("#contaDlg").showModal(); });
+  $("#contaClose").addEventListener("click", () => $("#contaDlg").close());
+  fecharAoClicarFora($("#contaDlg"));
+  $("#sair").addEventListener("click", () => { $("#contaDlg").close(); fb.signOut(auth); });
+  $("#reenviar").addEventListener("click", async () => {
+    try { await fb.sendEmailVerification(usuario); $("#cMsg").textContent = "Enviamos o e-mail de confirmação de novo."; }
+    catch (er) { $("#cMsg").textContent = erroMsg(er); }
+  });
+  $("#convForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const em = $("#convEmail").value.trim().toLowerCase();
+    if (!em) return;
+    try {
+      await fb.setDoc(fb.doc(db, "convites", em), { familia: famRef.id, por: usuario.email || "" });
+      await fb.updateDoc(famRef, { convidados: fb.arrayUnion(em) });
+      $("#convEmail").value = "";
+      $("#cMsg").textContent = `Convite criado. Peça para ${em} abrir o app e entrar com esse e-mail.`;
+    } catch (er) { $("#cMsg").textContent = erroMsg(er); }
+  });
+  $("#cMembros").addEventListener("click", async e => {
+    const b = e.target.closest("[data-desconvidar]");
+    if (!b) return;
+    const em = b.dataset.desconvidar;
+    await fb.deleteDoc(fb.doc(db, "convites", em)).catch(() => {});
+    await fb.updateDoc(famRef, { convidados: fb.arrayRemove(em) }).catch(er => aviso(erroMsg(er)));
+  });
+}
+
+/* ===== Início ===== */
+let iniciado = false;
+function iniciarApp() {
+  loadDay(); renderBlocks();
+  if (!iniciado) {
+    iniciado = true;
+    const f = prefs.get("rotina-filtro", "tudo");
+    const btn = $(`.seg button[data-f="${f}"]`);
+    if (btn) btn.click();
+    setInterval(update, 30000);
+  }
   update();
-  updateDiarioBadge();
-  setInterval(update, 30000);
+}
+
+(async function init() {
+  const tema = prefs.get("rotina-tema", null);
+  if (tema) document.documentElement.dataset.theme = tema;
+  renderTips();
+  if (!FIREBASE_CONFIG) { modo = "local"; iniciarApp(); return; }
+
+  modo = "nuvem";
+  $("#splash").hidden = false;
+  $("#rodape p").textContent = "Com login, tudo fica salvo na nuvem e só a sua família vê.";
+  try { await carregarFirebase(); }
+  catch (e) { $("#splash").hidden = true; modo = "local"; iniciarApp(); aviso("Sem conexão com a nuvem — usando só este aparelho."); return; }
+  ligarLogin();
+  fb.getRedirectResult(auth).catch(e => { $("#aMsg").textContent = erroMsg(e); });
+  fb.onAuthStateChanged(auth, async user => {
+    usuario = user;
+    $("#splash").hidden = true;
+    if (!user) {
+      Object.values(unsubs).forEach(u => u && u());
+      for (const k in cache) delete cache[k];
+      famRef = null; famData = null;
+      $("#contaBtn").hidden = true;
+      mostrarLogin();
+      return;
+    }
+    esconderLogin();
+    $("#splash").hidden = false;
+    $("#contaBtn").hidden = false;
+    try { await entrarFamilia(user); await migrarLocal(); }
+    catch (e) { mostrarLogin("Não consegui abrir seus dados: " + erroMsg(e)); return; }
+    for (const k in cache) delete cache[k];
+    $("#splash").hidden = true;
+    iniciarApp();
+    ouvirDia(currentDay);
+    ouvirFamilia();
+    renderConta();
+  });
 })();
 </script>
 </body>
